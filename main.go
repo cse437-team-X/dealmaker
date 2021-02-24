@@ -17,14 +17,14 @@ func main() {
 			"message": "pong",
 		})
 	})
-	r.GET("test", func(context *gin.Context) {
+	r.POST("/test", func(c *gin.Context) {
 		s := factory.Factory.Get("/auth/user/login")
 		resp := model.UserLoginResponse{}
 		s.Run(&model.UserLoginRequest{
-			Username:       "admin",
-			HashedPassword: "admin",
+			Username:       c.PostForm(ReqUsername),
+			HashedPassword: c.PostForm(ReqHashedPassword),
 		}, &resp)
-		context.JSON(resp.BaseCode, resp)
+		c.JSON(resp.BaseCode, resp)
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
