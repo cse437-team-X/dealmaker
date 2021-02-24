@@ -5,7 +5,6 @@ import (
 	"github.com/dealmaker/factory"
 	"github.com/dealmaker/model"
 	"github.com/gin-gonic/gin"
-	"time"
 )
 
 func main() {
@@ -20,14 +19,12 @@ func main() {
 	})
 	r.GET("test", func(context *gin.Context) {
 		s := factory.Factory.Get("/auth/user/login")
+		resp := model.UserLoginResponse{}
 		s.Run(&model.UserLoginRequest{
-			BaseRequest:    model.BaseRequest{
-				BaseTime:  time.Now().Unix(),
-				BaseLogId: "LOGID2ijdisdi",
-			},
-			Username:       "test1",
-			HashedPassword: "asdq23ewidqcia",
-		})
+			Username:       "admin",
+			HashedPassword: "admin",
+		}, &resp)
+		context.JSON(resp.BaseCode, resp)
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

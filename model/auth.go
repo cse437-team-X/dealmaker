@@ -15,3 +15,11 @@ func (u *UserLoginRequest) GetUsername() string {
 }
 
 
+type UserLoginResponse struct {
+	BaseResponse
+	Message string
+}
+
+func (u *UserLoginResponse) SetMessage(v string) {
+	u.Message = v
+}
