@@ -1,25 +1,15 @@
 package model
 
-type UserLoginRequest struct {
-	BaseRequest
+type UserLoginDomain struct {
+	BaseDomain
 	Username string
 	HashedPassword string
 }
 
-func (u *UserLoginRequest) GetHashedPassword() string {
+func (u *UserLoginDomain) GetHashedPassword() string {
 	return u.HashedPassword
 }
 
-func (u *UserLoginRequest) GetUsername() string {
+func (u *UserLoginDomain) GetUsername() string {
 	return u.Username
-}
-
-
-type UserLoginResponse struct {
-	BaseResponse
-	Message string
-}
-
-func (u *UserLoginResponse) SetMessage(v string) {
-	u.Message = v
 }

@@ -4,34 +4,26 @@ import (
 	"gitee.com/fat_marmota/streamline"
 )
 
-type AuthReqInterface interface {
+type AuthenticatorInterface interface {
+	BaseInterface
 	GetHashedPassword() string
 	GetUsername() string
-	BaseReqInterface
 }
 
-type AuthRespInterface interface {
-	SetMessage(v string)
-	BaseRespInterface
-}
-
-func Authenticator(self *streamline.Streamline, in interface{}, out interface{}) error {
-	data := in.(AuthReqInterface)
+func Authenticator(c *streamline.ConveyorBelt) error {
+	data := c.DataPanel.(AuthenticatorInterface)
 	d1 := data.GetHashedPassword()
 	d2 := data.GetUsername()
 
 	t := data.GetBaseTime()
 
-	resp := out.(AuthRespInterface)
-	id := resp.GetBaseLogId()
-
 	if queryUsernamePassword(d2, d1) == true {
-		resp.SetBaseCode(200)
+		data.SetBaseCode(200)
 	} else {
-		resp.SetBaseCode(503)
+		data.SetBaseCode(502)
 	}
 
-	self.Logger.Debugf("%v %v %v %v", d1,d2,t,id)
+	c.Logger.Debugf("%v %v %v", d1,d2,t)
 	return nil
 }
 

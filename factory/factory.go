@@ -1,7 +1,6 @@
 package factory
 
 import (
-	"gitee.com/fat_marmota/infra/log"
 	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/slice"
 )
@@ -13,7 +12,7 @@ func init() {
 }
 
 func BuildStreamlines() {
-	userLoginSl := Factory.NewStreamline("/auth/user/login", "login", "user", log.GlobalLogger)
+	userLoginSl := Factory.NewStreamline("/auth/user/login", "login", "user")
 	userLoginSl.Add("Authenticator", slice.Authenticator)
 
 	AddBaseRequestFillerToAll()

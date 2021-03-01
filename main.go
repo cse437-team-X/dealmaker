@@ -3,7 +3,7 @@ package main
 import (
 	"gitee.com/fat_marmota/infra/log"
 	"github.com/dealmaker/factory"
-	"github.com/dealmaker/model"
+	"github.com/dealmaker/handler"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,14 +17,6 @@ func main() {
 			"message": "pong",
 		})
 	})
-	r.POST("/test", func(c *gin.Context) {
-		s := factory.Factory.Get("/auth/user/login")
-		resp := model.UserLoginResponse{}
-		s.Run(&model.UserLoginRequest{
-			Username:       c.PostForm(ReqUsername),
-			HashedPassword: c.PostForm(ReqHashedPassword),
-		}, &resp)
-		c.JSON(resp.BaseCode, resp)
-	})
+	r.POST("/auth/user/login", handler.UserLogin)
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

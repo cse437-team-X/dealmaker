@@ -5,19 +5,10 @@ import (
 	"time"
 )
 
-type FillBaseRequest interface {
-	SetBaseTime(v int64)
-}
-
-type FillBaseResponse interface {
-	SetBaseLogId(v string)
-}
-
-func BaseRequestFiller(self *streamline.Streamline, in interface{}, out interface{}) error {
-	indata := in.(FillBaseRequest)
-	indata.SetBaseTime(time.Now().UnixNano())
-	outdata := out.(FillBaseResponse)
-	outdata.SetBaseLogId(_logIdGen())
+func BaseRequestFiller(c *streamline.ConveyorBelt) error {
+	data := c.DataPanel.(BaseInterface)
+	data.SetBaseTime(time.Now().UnixNano())
+	data.SetBaseLogId(_logIdGen())
 	return nil
 }
 
