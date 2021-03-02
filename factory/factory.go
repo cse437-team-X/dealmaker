@@ -13,7 +13,7 @@ func init() {
 
 func BuildStreamlines() {
 	userLoginSl := Factory.NewStreamline("/auth/user/login", "login", "user")
-	userLoginSl.Add("Authenticator", slice.Authenticator)
+	userLoginSl.Add("Login", slice.Login)
 
 	AddBaseRequestFillerToAll()
 }
@@ -21,5 +21,6 @@ func BuildStreamlines() {
 func AddBaseRequestFillerToAll() {
 	for _,v := range Factory.GetAllStreamlines() {
 		v.InsertFront("BaseRequestFiller", slice.BaseRequestFiller)
+		v.InsertFront("Authenticator", slice.Authenticator)
 	}
 }

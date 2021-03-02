@@ -15,5 +15,4 @@ func (u *UserLoginDomain) GetUsername() string {
 
 type UserLogoutDomain struct {
 	BaseDomain
-
 }

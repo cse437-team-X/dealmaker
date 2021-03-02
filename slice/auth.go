@@ -11,7 +11,7 @@ type AuthenticatorInterface interface {
 	GetUsername() string
 }
 
-func Authenticator(c *streamline.ConveyorBelt) int {
+func Login(c *streamline.ConveyorBelt) int {
 	data := c.DataPanel.(AuthenticatorInterface)
 	d1 := data.GetHashedPassword()
 	d2 := data.GetUsername()
@@ -20,7 +20,7 @@ func Authenticator(c *streamline.ConveyorBelt) int {
 		return http.StatusForbidden
 	}
 
-	c.Logger.Infow("Authenticator",
+	c.Logger.Debugw("Login",
 		"username",d1,
 			"hashed_pw",d2)
 	return http.StatusOK
@@ -31,4 +31,11 @@ func queryUsernamePassword(username, hashpw string) bool {
 		return true
 	}
 	return false
+}
+
+func Authenticator(c *streamline.ConveyorBelt) int {
+	data := c.DataPanel.(BaseInterface)
+	session := data.GetSessionId()
+	c.Logger.Debugw("Authenticator", "sessionId", session)
+	return http.StatusOK
 }
