@@ -2,6 +2,7 @@ package slice
 
 import (
 	"gitee.com/fat_marmota/streamline"
+	"net/http"
 )
 
 type AuthenticatorInterface interface {
@@ -10,21 +11,19 @@ type AuthenticatorInterface interface {
 	GetUsername() string
 }
 
-func Authenticator(c *streamline.ConveyorBelt) error {
+func Authenticator(c *streamline.ConveyorBelt) int {
 	data := c.DataPanel.(AuthenticatorInterface)
 	d1 := data.GetHashedPassword()
 	d2 := data.GetUsername()
 
-	t := data.GetBaseTime()
-
-	if queryUsernamePassword(d2, d1) == true {
-		data.SetBaseCode(200)
-	} else {
-		data.SetBaseCode(502)
+	if queryUsernamePassword(d2, d1) != true {
+		return http.StatusForbidden
 	}
 
-	c.Logger.Debugf("%v %v %v", d1,d2,t)
-	return nil
+	c.Logger.Infow("Authenticator",
+		"username",d1,
+			"hashed_pw",d2)
+	return http.StatusOK
 }
 
 func queryUsernamePassword(username, hashpw string) bool {

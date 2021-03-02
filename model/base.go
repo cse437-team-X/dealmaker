@@ -2,8 +2,8 @@ package model
 
 type BaseDomain struct {
 	BaseTime int64
-	BaseCode int
 	BaseLogId string
+	BaseSessionId string
 }
 
 func (b *BaseDomain) GetBaseTime() int64 {
@@ -18,6 +18,10 @@ func (b *BaseDomain) GetBaseLogId() string {
 func (b *BaseDomain) SetBaseLogId(v string) {
 	b.BaseLogId = v
 }
-func (b *BaseDomain) SetBaseCode(v int) {
-	b.BaseCode = v
+
+func (b *BaseDomain) GetSessionId() string {
+	return b.BaseSessionId
+}
+func (b *BaseDomain) SetSessionId(s string) {
+	b.BaseSessionId = s
 }

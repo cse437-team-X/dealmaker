@@ -8,15 +8,12 @@ import (
 )
 
 func main() {
-	log.InitZapSugared(true, false)
+	// Init begin
+	log.InitZapSugared(true, true, 2)
 	factory.BuildStreamlines()
+	// Init end
 
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
 	r.POST("/auth/user/login", handler.UserLogin)
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

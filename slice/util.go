@@ -1,19 +1,13 @@
 package slice
 
-import (
-	"gitee.com/fat_marmota/streamline"
-	"time"
-)
-
-func BaseRequestFiller(c *streamline.ConveyorBelt) error {
-	data := c.DataPanel.(BaseInterface)
-	data.SetBaseTime(time.Now().UnixNano())
-	data.SetBaseLogId(_logIdGen())
-	return nil
-}
+import "time"
 
 var _logid = 0
 func _logIdGen() string {
 	_logid ++
 	return string(rune(_logid))
+}
+
+func TimeMilli() int64 {
+	return time.Now().UnixNano()/1000
 }
