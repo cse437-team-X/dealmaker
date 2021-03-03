@@ -23,7 +23,7 @@ func BaseRequestFiller(c *streamline.ConveyorBelt) int {
 
 	session := sessions.Default(c.Ctx.(*gin.Context))
 	id:=session.Get(SessionId)
-	SessionIdGen()
+	//SessionIdGen()
 	if id == nil {
 		session.Set(SessionId, SessionIdGen())
 		session.Save()

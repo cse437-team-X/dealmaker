@@ -37,5 +37,6 @@ func Authenticator(c *streamline.ConveyorBelt) int {
 	data := c.DataPanel.(BaseInterface)
 	session := data.GetSessionId()
 	c.Logger.Debugw("Authenticator", "sessionId", session)
+
 	return http.StatusOK
 }

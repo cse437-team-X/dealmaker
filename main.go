@@ -5,7 +5,7 @@ import (
 	"github.com/dealmaker/factory"
 	"github.com/dealmaker/handler"
 	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-contrib/sessions/memstore"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,7 +17,7 @@ func main() {
 
 	r := gin.Default()
 
-	store := cookie.NewStore([]byte("secret"))
+	store := memstore.NewStore([]byte("secret"))
 	r.Use(sessions.Sessions("user_info", store))
 
 	r.POST("/auth/user/login", handler.UserLogin)

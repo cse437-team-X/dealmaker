@@ -3,7 +3,6 @@ package slice
 import (
 	"crypto"
 	"fmt"
-	"gitee.com/fat_marmota/infra/log"
 	"time"
 )
 
@@ -24,6 +23,6 @@ func SessionIdGen() string {
 	hasher := crypto.SHA1.New()
 	hasher.Write([]byte(str))
 	res := fmt.Sprintf("%x", hasher.Sum(nil))
-	log.Debugf("Gen session %v", res)
+	//log.Debugf("Gen session %v", res)
 	return res
 }
