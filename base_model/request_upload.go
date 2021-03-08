@@ -1,4 +1,4 @@
-package model
+package base_model
 
 type RequestUploadDomain struct {
 	BaseDomain

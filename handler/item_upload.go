@@ -4,13 +4,13 @@ import (
 	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/codegen/idl"
 	"github.com/dealmaker/factory"
-	"github.com/dealmaker/base_model"
+	"github.com/dealmaker/procedure/item_upload"
 	"github.com/gin-gonic/gin"
 )
 
-func UserLogin (c *gin.Context) {
-	s := factory.Factory.Get("/auth/user/login")
-	domain := base_model.UserLoginDomain{}
+func ItemUpload(c *gin.Context) {
+	s := factory.Factory.Get("/item/upload")
+	domain := item_upload.ItemUploadDomain{}
 	err := c.Bind(&domain)
 	if err != nil {
 		return

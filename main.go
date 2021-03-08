@@ -4,8 +4,6 @@ import (
 	"gitee.com/fat_marmota/infra/log"
 	"github.com/dealmaker/factory"
 	"github.com/dealmaker/handler"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/memstore"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,10 +15,10 @@ func main() {
 
 	r := gin.Default()
 
-	store := memstore.NewStore([]byte("secret"))
-	r.Use(sessions.Sessions("user_info", store))
+	//store := memstore.NewStore([]byte("secret"))
+	//r.Use(sessions.Sessions("user_info", store))
 
-	r.POST("/auth/user/login", handler.UserLogin)
+	r.POST("/test", handler.ItemUpload)
 	err := r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 	if err != nil {
 		panic(err)

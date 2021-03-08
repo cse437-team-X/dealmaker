@@ -14,6 +14,8 @@ func init() {
 func BuildStreamlines() {
 	//userLoginSl := Factory.NewStreamline("/auth/user/login", "login", "user")
 	//userLoginSl.Add("Login", slice.Login)
+	itemUpload := Factory.NewStreamline("/item/upload", "upload", "item")
+	itemUpload.Add("rua", slice.InsertItem)
 
 	AddBaseRequestFillerToAll()
 }

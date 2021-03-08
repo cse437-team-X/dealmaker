@@ -17,7 +17,7 @@ type BaseInterface interface {
 }
 
 func BaseRequestFiller(c *streamline.ConveyorBelt) int {
-	data := c.DataPanel.(BaseInterface)
+	data := c.DataDomain.(BaseInterface)
 	data.SetBaseTime(TimeMilli())
 	data.SetBaseLogId(_logIdGen())
 
