@@ -8,7 +8,7 @@ import (
 type ItemUploadDomain struct {
 	base_model.BaseDomain
 	obj.Item
-	base_model.AuthedUserDomain
+	//base_model.AuthedUserDomain
 
 	Price int32
 	Discount bool

@@ -3,6 +3,8 @@ package slice
 import (
 	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/base_model"
+	"github.com/dealmaker/base_model/obj"
+	"github.com/dealmaker/dal"
 	"github.com/kataras/jwt"
 	"net/http"
 	"time"
@@ -21,6 +23,8 @@ func init() {
 type UserInfoInterface interface {
 	GetHashedPassword() string
 	GetUsername() string
+	GetEmail() string
+	GetStatus() int
 }
 
 type JwtInterface interface {
@@ -32,22 +36,35 @@ type JwtInterface interface {
 	GetVerifiedToken() *jwt.VerifiedToken
 }
 
-//func SignUp(c *streamline.ConveyorBelt) int {
-//
-//}
+func SignUp(c *streamline.ConveyorBelt) int {
+	data := c.DataDomain.(UserInfoInterface)
+	dal.AddUser(obj.User{
+		Username:       data.GetUsername(),
+		Email:          data.GetEmail(),
+		HashedPassword: data.GetHashedPassword(),
+		Status:         data.GetStatus(),
+	})
+	c.Logger.Debugw("signup", "filled user", obj.User{
+		Username:       data.GetUsername(),
+		Email:          data.GetEmail(),
+		HashedPassword: data.GetHashedPassword(),
+		Status:         data.GetStatus(),
+	})
+	return http.StatusOK
+}
 
 func ValidateUsernamePassword(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(UserInfoInterface)
-	d1 := data.GetHashedPassword()
-	d2 := data.GetUsername()
+	hpw := data.GetHashedPassword()
+	email := data.GetEmail()
 
-	if queryUsernamePassword(d2, d1) != true {
+	if queryUsernamePassword(email, hpw) != true {
 		return http.StatusForbidden
 	}
 
 	c.Logger.Debugw("Login",
-		"username",d1,
-			"hashed_pw",d2)
+		"email",email,
+			"hashed_pw",hpw)
 	return http.StatusOK
 }
 
@@ -62,11 +79,9 @@ func Logout(c *streamline.ConveyorBelt) int {
 }
 
 
-func queryUsernamePassword(username, hashpw string) bool {
-	if username == "admin" && hashpw == "admin" {
-		return true
-	}
-	return false
+func queryUsernamePassword(email, hpw string) bool {
+	u := dal.GetUser(email)
+	return u.GetHashedPassword() == hpw
 }
 
 func SignToken(c *streamline.ConveyorBelt) int {

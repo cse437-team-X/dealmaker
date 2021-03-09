@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	cloud.google.com/go v0.78.0 // indirect
+	gitee.com/fat_marmota/infra/db_client v0.0.0
 	gitee.com/fat_marmota/infra/log v0.0.0
 	gitee.com/fat_marmota/streamline v0.0.0
 	github.com/aws/aws-sdk-go v1.37.22 // indirect
@@ -15,12 +16,13 @@ require (
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/golang/snappy v0.0.3 // indirect
 	github.com/json-iterator/go v1.1.10 // indirect
-	github.com/kataras/jwt v0.1.2 // indirect
+	github.com/kataras/jwt v0.1.2
 	github.com/klauspost/compress v1.11.9 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.4 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
+	github.com/stretchr/testify v1.6.1
 	github.com/ugorji/go v1.2.4 // indirect
 	go.etcd.io/bbolt v1.3.5 // indirect
 	go.mongodb.org/mongo-driver v1.4.6 // indirect
@@ -32,9 +34,11 @@ require (
 	golang.org/x/sys v0.0.0-20210301091718-77cc2087c03b // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
+	gorm.io/gorm v1.20.12
 )
 
 replace (
+	gitee.com/fat_marmota/infra/db_client v0.0.0 => ../../gitee.com/fat_marmota/infra/db_client
 	gitee.com/fat_marmota/infra/log v0.0.0 => ../../gitee.com/fat_marmota/infra/log
 	gitee.com/fat_marmota/streamline v0.0.0 => ../../gitee.com/streamline
 )

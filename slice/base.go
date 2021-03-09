@@ -2,8 +2,6 @@ package slice
 
 import (
 	"gitee.com/fat_marmota/streamline"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -21,14 +19,14 @@ func BaseRequestFiller(c *streamline.ConveyorBelt) int {
 	data.SetBaseTime(TimeMilli())
 	data.SetBaseLogId(_logIdGen())
 
-	session := sessions.Default(c.Ctx.(*gin.Context))
-	id:=session.Get(SessionId)
+	//session := sessions.Default(c.Ctx.(*gin.Context))
+	//id:=session.Get(SessionId)
 	//SessionIdGen()
-	if id == nil {
-		session.Set(SessionId, SessionIdGen())
-		session.Save()
-	}
-	c.Logger.Debugw("Session test", SessionId, id)
+	//if id == nil {
+	//	session.Set(SessionId, SessionIdGen())
+	//	session.Save()
+	//}
+	//c.Logger.Debugw("Session test", SessionId, id)
 
 	return http.StatusOK
 }
