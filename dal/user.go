@@ -1,12 +1,13 @@
 package dal
 
 import (
+	"gitee.com/fat_marmota/infra/log"
 	"github.com/dealmaker/base_model/obj"
 	"gorm.io/gorm"
 )
 
 type UserDBModel struct {
-	obj.User
+	obj.UserInfo
 	gorm.Model
 }
 
@@ -17,15 +18,21 @@ func MigrateUserTable() {
 	}
 }
 
-func AddUser(user obj.User) {
+func AddUser(user obj.UserInfo) error {
 	dbuser := &UserDBModel{
-		User:  user,
+		UserInfo: user,
 	}
-	DB.Create(dbuser)
+	res := DB.Create(dbuser)
+	err := res.Error
+	if err != nil {
+		log.Errorw("Add user", "err", err.Error())
+		return err
+	}
+	return nil
 }
 
-func GetUser(email string) obj.User {
+func GetUser(email string) obj.UserInfo {
 	res := UserDBModel{}
 	DB.Take(&res, "email = ?", email)
-	return res.User
+	return res.UserInfo
 }

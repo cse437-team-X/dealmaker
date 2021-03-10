@@ -38,13 +38,13 @@ type JwtInterface interface {
 
 func SignUp(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(UserInfoInterface)
-	dal.AddUser(obj.User{
+	dal.AddUser(obj.UserInfo{
 		Username:       data.GetUsername(),
 		Email:          data.GetEmail(),
 		HashedPassword: data.GetHashedPassword(),
 		Status:         data.GetStatus(),
 	})
-	c.Logger.Debugw("signup", "filled user", obj.User{
+	c.Logger.Debugw("signup", "filled user", obj.UserInfo{
 		Username:       data.GetUsername(),
 		Email:          data.GetEmail(),
 		HashedPassword: data.GetHashedPassword(),

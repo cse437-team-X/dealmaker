@@ -1,20 +1,20 @@
 package obj
 
-type User struct {
-	Username string
-	Email string
+type UserInfo struct {
+	Username string        `gorm:"unique"`
+	Email string           `gorm:"unique"`
 	HashedPassword string
 	Status int
 }
-func (u *User) GetHashedPassword() string {
+func (u *UserInfo) GetHashedPassword() string {
 	return u.HashedPassword
 }
-func (u *User) GetUsername() string {
+func (u *UserInfo) GetUsername() string {
 	return u.Username
 }
-func (u *User) GetEmail() string {
+func (u *UserInfo) GetEmail() string {
 	return u.Email
 }
-func (u *User) GetStatus() int {
+func (u *UserInfo) GetStatus() int {
 	return u.Status
 }

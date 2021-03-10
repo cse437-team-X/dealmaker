@@ -7,7 +7,7 @@ import (
 
 type UserInfoDomain struct {
 	BaseDomain
-	obj.User
+	obj.UserInfo
 }
 
 type JwtAuth struct {
