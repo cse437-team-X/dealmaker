@@ -1,4 +1,4 @@
-package base_model
+package base
 
 type BaseDomain struct {
 	BaseTime int64

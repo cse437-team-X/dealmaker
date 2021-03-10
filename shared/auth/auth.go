@@ -1,10 +1,9 @@
-package slice
+package auth
 
 import (
 	"gitee.com/fat_marmota/streamline"
-	"github.com/dealmaker/base_model"
-	"github.com/dealmaker/base_model/obj"
 	"github.com/dealmaker/dal"
+	"github.com/dealmaker/model/obj"
 	"github.com/kataras/jwt"
 	"net/http"
 	"time"
@@ -30,8 +29,8 @@ type UserInfoInterface interface {
 type JwtInterface interface {
 	GetToken() string
 	SetToken(string)
-	GetClaims() base_model.TokenClaim
-	SetClaims(base_model.TokenClaim)
+	GetClaims() TokenClaim
+	SetClaims(TokenClaim)
 	SetVerifiedToken(*jwt.VerifiedToken)
 	GetVerifiedToken() *jwt.VerifiedToken
 }
@@ -87,7 +86,7 @@ func queryUsernamePassword(email, hpw string) bool {
 func SignToken(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(JwtInterface)
 
-	token, err := jwt.Sign(jwt.HS256, sharedKey, base_model.TokenClaim{
+	token, err := jwt.Sign(jwt.HS256, sharedKey, TokenClaim{
 		Uid: "0x00000000",
 		Role: "admin",
 	}, jwt.MaxAge(TokenExpireTime))
@@ -107,7 +106,7 @@ func Validate(c *streamline.ConveyorBelt) int {
 	if err != nil {
 		return http.StatusForbidden
 	}
-	myclaims := base_model.TokenClaim{}
+	myclaims := TokenClaim{}
 	err = vtoken.Claims(&myclaims)
 	if err != nil {
 		return http.StatusForbidden

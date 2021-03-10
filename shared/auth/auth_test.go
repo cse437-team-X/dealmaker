@@ -1,12 +1,12 @@
-package slice
+package auth
 
 import (
 	"context"
 	"gitee.com/fat_marmota/infra/log"
 	"gitee.com/fat_marmota/streamline"
-	"github.com/dealmaker/base_model"
-	"github.com/dealmaker/base_model/obj"
 	"github.com/dealmaker/dal"
+	"github.com/dealmaker/model"
+	"github.com/dealmaker/model/obj"
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"testing"
@@ -20,7 +20,7 @@ func InitForTest() {
 func TestAuth(t *testing.T) {
 	InitForTest()
 
-	dataDomain := base_model.JwtAuth{}
+	dataDomain := JwtAuth{}
 	c := streamline.ConveyorBelt{
 		DataDomain: &dataDomain,
 		S:          nil,
@@ -45,7 +45,7 @@ func TestAuth(t *testing.T) {
 func TestValidateUsernamePassword(t *testing.T) {
 	log.InitZapSugared(true, false, 2)
 	dal.InitDatabaseClient("root:12345678@tcp(127.0.0.1:3306)/dealmaker", nil, "mysql")
-	dataDomain := base_model.UserInfoDomain{}
+	dataDomain := model.UserInfoDomain{}
 	dataDomain.Email = "jiayi.zhang@wustl.edu"
 	dataDomain.HashedPassword = "fakepw"
 	c := streamline.ConveyorBelt{
@@ -62,7 +62,7 @@ func TestFullAuth(t *testing.T) {
 	InitForTest()
 
 	type LoginDomain struct {
-		base_model.JwtAuth
+		JwtAuth
 		obj.UserInfo
 	}
 

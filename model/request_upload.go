@@ -1,7 +1,9 @@
-package base_model
+package model
+
+import "github.com/dealmaker/shared/base"
 
 type RequestUploadDomain struct {
-	BaseDomain
+	base.BaseDomain
 	ExpectPrice int32
 	RangeValue int32
 	InterestTags []string

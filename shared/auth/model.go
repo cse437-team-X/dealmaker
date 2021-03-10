@@ -1,14 +1,8 @@
-package base_model
+package auth
 
 import (
-	"github.com/dealmaker/base_model/obj"
 	"github.com/kataras/jwt"
 )
-
-type UserInfoDomain struct {
-	BaseDomain
-	obj.UserInfo
-}
 
 type JwtAuth struct {
 	TokenClaim

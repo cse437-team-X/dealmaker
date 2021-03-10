@@ -1,12 +1,12 @@
 package item_upload
 
 import (
-	"github.com/dealmaker/base_model"
-	"github.com/dealmaker/base_model/obj"
+	"github.com/dealmaker/model/obj"
+	"github.com/dealmaker/shared/base"
 )
 
 type ItemUploadDomain struct {
-	base_model.BaseDomain
+	base.BaseDomain
 	obj.Item
 	//base_model.AuthedUserDomain
 

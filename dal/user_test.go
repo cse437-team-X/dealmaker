@@ -2,7 +2,7 @@ package dal
 
 import (
 	"gitee.com/fat_marmota/infra/log"
-	"github.com/dealmaker/base_model/obj"
+	"github.com/dealmaker/model/obj"
 	"github.com/stretchr/testify/require"
 	"testing"
 	"time"

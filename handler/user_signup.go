@@ -2,7 +2,7 @@ package handler
 
 import (
 	"gitee.com/fat_marmota/streamline"
-	"github.com/dealmaker/base_model"
+	"github.com/dealmaker/model"
 	"github.com/dealmaker/codegen/idl"
 	"github.com/dealmaker/factory"
 	"github.com/gin-gonic/gin"
@@ -10,7 +10,7 @@ import (
 
 func UserSignup (c *gin.Context) {
 	s := factory.Factory.Get("/auth/user/signup")
-	domain := base_model.UserInfoDomain{}
+	domain := model.UserInfoDomain{}
 	err := c.Bind(&domain)
 	if err != nil {
 		return
