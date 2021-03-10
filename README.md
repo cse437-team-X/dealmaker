@@ -25,3 +25,5 @@ Currently, `procedure`s in `shared` folder is more complete. If you need referen
 
 ## Note2
 To get this running, you need to modify `go.mod` file, remove those `replace`s or change the path to your local path. I use replace is because those dependencies are also under active developing.
+
+They are https://github.com/itzMeerkat/streamline and https://github.com/itzMeerkat/mentally-friendlly-infra.
