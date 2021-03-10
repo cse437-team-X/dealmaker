@@ -2,6 +2,7 @@ package factory
 
 import (
 	"gitee.com/fat_marmota/streamline"
+	"github.com/dealmaker/procedure/item_upload"
 	"github.com/dealmaker/shared/auth"
 	"github.com/dealmaker/shared/base"
 )
@@ -15,11 +16,16 @@ func init() {
 func BuildStreamlines() {
 	//userLoginSl := Factory.NewStreamline("/auth/user/login", "login", "user")
 	//userLoginSl.Add("Login", slice.Login)
-	//itemUpload := Factory.NewStreamline("/item/upload", "upload", "item")
-	//itemUpload.Add("rua", slice.Item)
+	itemUpload := Factory.NewStreamline("/item/upload", "upload", "item")
+	itemUpload.Add("rua", item_upload.InsertItem)
 
 	signup := Factory.NewStreamline("/auth/user/signup", "signup", "user")
 	signup.Add("add_user", auth.SignUp)
+
+
+	login := Factory.NewStreamline("auth/user/login", "login", "user")
+	login.Add("check_username_pw", auth.ValidateUsernamePassword)
+	login.Add("sign_token", auth.SignToken)
 
 	AddBaseRequestFillerToAll()
 }

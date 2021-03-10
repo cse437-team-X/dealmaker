@@ -2,10 +2,10 @@ package handler
 
 import (
 	"gitee.com/fat_marmota/streamline"
-	"github.com/dealmaker/model"
-	"github.com/dealmaker/codegen/idl"
 	"github.com/dealmaker/factory"
+	"github.com/dealmaker/model"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func UserSignup (c *gin.Context) {
@@ -15,13 +15,11 @@ func UserSignup (c *gin.Context) {
 	if err != nil {
 		return
 	}
-	conv := streamline.NewConveyorBelt(s, c, &domain)
+	conv := streamline.NewConveyorBelt(s, c, &domain, GenLogMeta)
 	code, err := conv.Run()
 	if err != nil {
 		c.AbortWithStatus(code)
 		return
 	}
-	c.JSON(code, idl.UserLoginResponse{
-		Message: "Success",
-	})
+	c.Redirect(http.StatusOK, "/auth/user/login")
 }

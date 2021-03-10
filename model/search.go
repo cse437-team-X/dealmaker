@@ -6,7 +6,7 @@ import (
 )
 
 type SearchDomain struct {
-	base.BaseDomain
+	base.Base
 	TargetTags []string
 
 	RespItemList []obj.Item

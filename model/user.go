@@ -6,6 +6,6 @@ import (
 )
 
 type UserInfoDomain struct {
-	base.BaseDomain
+	base.Base
 	obj.UserInfo
 }

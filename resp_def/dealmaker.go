@@ -1,5 +1,5 @@
-package idl
+package resp_def
 
 type UserLoginResponse struct {
-	Message string
+	Token string
 }

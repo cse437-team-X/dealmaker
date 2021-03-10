@@ -21,6 +21,8 @@ func main() {
 	//r.Use(sessions.Sessions("user_info", store))
 
 	r.POST("/auth/user/signup", handler.UserSignup)
+	r.POST("/auth/user/login", handler.UserLogin)
+	//r.POST("/item/upload", handler.ItemUpload)
 	err := r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 	if err != nil {
 		panic(err)

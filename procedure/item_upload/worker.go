@@ -14,7 +14,7 @@ type GetItemInterface interface {
 
 func InsertItem(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(GetItemInterface)
-	c.Logger.Debugw("inserting to db",
+	c.Debugw(
 		"desc",data.GetItemDescription(),
 		"title", data.GetItemTitle(),
 		"urls", data.GetItemImageUrls(),

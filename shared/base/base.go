@@ -12,45 +12,39 @@ import (
 )
 
 type BaseInterface interface {
-	GetBaseTime() int64
-	SetBaseTime(int64)
-	GetBaseLogId() string
-	SetBaseLogId(string)
-	SetSessionId(string)
-	GetSessionId() string
+	GetTime() int64
+	SetTime(int64)
+	GetLogId() string
+	SetLogId(string)
 }
 
 const MAX_RAND_VAL = 8192
 
 func genLogId(c *streamline.ConveyorBelt, t time.Time, ip string) string {
-	timeStr := time.Now().Format("20060102150405")
+	timeStr := t.Format("20060102150405")
 	ipStrip := strings.ReplaceAll(ip, ".", "")
+	if ipStrip == "::1" {
+		ipStrip = "127001"
+	}
+	c.Debugw("ip", ip, "ips", ipStrip)
 	ipNum, err := strconv.ParseInt(ipStrip,10,64)
 	if err != nil {
-		c.Logger.Errorw("Generate logid", "err", err.Error())
+		c.Errorw("err", err.Error())
 	}
 	rnd := rand.Intn(MAX_RAND_VAL)
 	ipHex := strconv.FormatInt(ipNum, 16)
 	rndHex := strconv.FormatInt(int64(rnd), 16)
 
 	logid := fmt.Sprintf("%s%s%s", timeStr, ipHex, rndHex)
+	c.Debugw("logid", logid)
 	return logid
 }
 
 func BaseRequestFiller(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(BaseInterface)
 	reqTime := time.Now()
-	data.SetBaseTime(reqTime.Unix())
-	data.SetBaseLogId(genLogId(c, reqTime, c.Ctx.(*gin.Context).ClientIP()))
-
-	//session := sessions.Default(c.Ctx.(*gin.Context))
-	//id:=session.Get(SessionId)
-	//SessionIdGen()
-	//if id == nil {
-	//	session.Set(SessionId, SessionIdGen())
-	//	session.Save()
-	//}
-	//c.Logger.Debugw("Session test", SessionId, id)
+	data.SetTime(reqTime.Unix())
+	data.SetLogId(genLogId(c, reqTime, c.Ctx.(*gin.Context).ClientIP()))
 
 	return http.StatusOK
 }
