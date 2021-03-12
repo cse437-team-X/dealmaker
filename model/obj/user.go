@@ -6,6 +6,7 @@ type UserInfo struct {
 	HashedPassword string
 	Status int
 }
+
 func (u *UserInfo) GetHashedPassword() string {
 	return u.HashedPassword
 }

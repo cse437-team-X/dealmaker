@@ -3,7 +3,7 @@ package auth
 import (
 	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/dal"
-	"github.com/dealmaker/model/obj"
+	"github.com/dealmaker/shared/auth/model"
 	"github.com/kataras/jwt"
 	"net/http"
 	"time"
@@ -19,51 +19,46 @@ func init() {
 	blockList = jwt.NewBlocklist(InvalidTokenExpireTime)
 }
 
-type UserInfoInterface interface {
-	GetHashedPassword() string
-	GetUsername() string
-	GetEmail() string
-	GetStatus() int
-}
-
 type JwtInterface interface {
+	GetHashedPassword() string
+	GetLoginName() string
+	GetStatus() int
+	SetUid(string)
+	GetUid() string
 	GetToken() string
 	SetToken(string)
-	GetClaims() TokenClaim
-	SetClaims(TokenClaim)
+	GetClaims() model.TokenClaim
+	SetClaims(model.TokenClaim)
 	SetVerifiedToken(*jwt.VerifiedToken)
 	GetVerifiedToken() *jwt.VerifiedToken
 }
 
 func SignUp(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(UserInfoInterface)
-	dal.AddUser(obj.UserInfo{
-		Username:       data.GetUsername(),
-		Email:          data.GetEmail(),
+	data := c.DataDomain.(model.CredUserInterface)
+	cuser := model.CredUser{
+		LoginName:      data.GetLoginName(),
 		HashedPassword: data.GetHashedPassword(),
 		Status:         data.GetStatus(),
-	})
-	c.Logger.Debugw("signup", "filled user", obj.UserInfo{
-		Username:       data.GetUsername(),
-		Email:          data.GetEmail(),
-		HashedPassword: data.GetHashedPassword(),
-		Status:         data.GetStatus(),
-	})
+	}
+
+	dal.AddCredUser(cuser)
+	c.Debugw("filled CredUser", cuser)
 	return http.StatusOK
 }
 
 func ValidateUsernamePassword(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(UserInfoInterface)
+	data := c.DataDomain.(JwtInterface)
 	hpw := data.GetHashedPassword()
-	email := data.GetEmail()
+	loginName := data.GetLoginName()
 
-	if queryUsernamePassword(email, hpw) != true {
+	userInstance := dal.GetCredUser(loginName)
+	if userInstance.GetHashedPassword() != hpw {
 		return http.StatusForbidden
 	}
 
-	c.Logger.Debugw("Login",
-		"email",email,
-			"hashed_pw",hpw)
+	data.SetUid(userInstance.GetUid())
+
+	c.Debugw("db user",userInstance)
 	return http.StatusOK
 }
 
@@ -78,23 +73,18 @@ func Logout(c *streamline.ConveyorBelt) int {
 }
 
 
-func queryUsernamePassword(email, hpw string) bool {
-	u := dal.GetUser(email)
-	return u.GetHashedPassword() == hpw
-}
-
 func SignToken(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(JwtInterface)
+	jwtdata := c.DataDomain.(JwtInterface)
 
-	token, err := jwt.Sign(jwt.HS256, sharedKey, TokenClaim{
-		Uid: "0x00000000",
+	token, err := jwt.Sign(jwt.HS256, sharedKey, model.TokenClaim{
+		Uid: jwtdata.GetUid(),
 		Role: "admin",
 	}, jwt.MaxAge(TokenExpireTime))
 	if err != nil {
 		panic(err)
 	}
 
-	data.SetToken(string(token))
+	jwtdata.SetToken(string(token))
 	return http.StatusOK
 }
 
@@ -106,7 +96,7 @@ func Validate(c *streamline.ConveyorBelt) int {
 	if err != nil {
 		return http.StatusForbidden
 	}
-	myclaims := TokenClaim{}
+	myclaims := model.TokenClaim{}
 	err = vtoken.Claims(&myclaims)
 	if err != nil {
 		return http.StatusForbidden
@@ -115,7 +105,7 @@ func Validate(c *streamline.ConveyorBelt) int {
 	data.SetClaims(myclaims)
 	data.SetVerifiedToken(vtoken)
 
-	c.Logger.Debugw("Authenticator",
+	c.Debugw(
 		"token", token,
 		"claims", c.DataDomain.(JwtInterface).GetClaims())
 

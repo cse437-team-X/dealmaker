@@ -1,11 +1,17 @@
 package model
 
 import (
-	"github.com/dealmaker/model/obj"
-	"github.com/dealmaker/shared/base"
+	"github.com/dealmaker/shared/auth/model"
+	"gorm.io/gorm"
 )
 
-type UserInfoDomain struct {
-	base.Base
-	obj.UserInfo
+type UserCredModel struct {
+	model.CredUser
+	gorm.Model
 }
+
+//type UserInfo struct {
+//	Email string
+//	Username string
+//	ContactInfo string
+//}

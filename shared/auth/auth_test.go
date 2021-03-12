@@ -5,8 +5,7 @@ import (
 	"gitee.com/fat_marmota/infra/log"
 	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/dal"
-	"github.com/dealmaker/model"
-	"github.com/dealmaker/model/obj"
+	model2 "github.com/dealmaker/shared/auth/model"
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"testing"
@@ -20,7 +19,7 @@ func InitForTest() {
 func TestAuth(t *testing.T) {
 	InitForTest()
 
-	dataDomain := JwtAuth{}
+	dataDomain := model2.JwtAuth{}
 	c := streamline.ConveyorBelt{
 		DataDomain: &dataDomain,
 		S:          nil,
@@ -42,43 +41,45 @@ func TestAuth(t *testing.T) {
 	require.Equal(t, r,http.StatusForbidden)
 }
 
-func TestValidateUsernamePassword(t *testing.T) {
-	log.InitZapSugared(true, false, 2)
-	dal.InitDatabaseClient("root:12345678@tcp(127.0.0.1:3306)/dealmaker", nil, "mysql")
-	dataDomain := model.UserInfoDomain{}
-	dataDomain.Email = "jiayi.zhang@wustl.edu"
-	dataDomain.HashedPassword = "fakepw"
-	c := streamline.ConveyorBelt{
-		DataDomain: &dataDomain,
-		S:          nil,
-		Ctx:        context.Background(),
-		Logger:     log.GlobalLogger,
-	}
-	r := ValidateUsernamePassword(&c)
-	require.Equal(t, r,http.StatusOK)
-}
+//func TestValidateUsernamePassword(t *testing.T) {
+//	log.InitZapSugared(true, false, 2)
+//	dal.InitDatabaseClient("root:12345678@tcp(127.0.0.1:3306)/dealmaker", nil, "mysql")
+//	dataDomain := model.UserInfoDomain{}
+//	dataDomain.Email = "jiayi.zhang@wustl.edu"
+//	dataDomain.HashedPassword = "fakepw"
+//	c := streamline.ConveyorBelt{
+//		DataDomain: &dataDomain,
+//		S:          nil,
+//		Ctx:        context.Background(),
+//		Logger:     log.GlobalLogger,
+//	}
+//	r := ValidateUsernamePassword(&c)
+//	require.Equal(t, r,http.StatusOK)
+//}
 
 func TestFullAuth(t *testing.T) {
 	InitForTest()
 
 	type LoginDomain struct {
-		JwtAuth
-		obj.UserInfo
+		model2.JwtAuth
+		model2.CredUser
 	}
 
 	dataDomain := LoginDomain{
-		UserInfo: obj.UserInfo{
-			Username:       "admin",
-			Email:          "jiayi.zhang@wustl.edu",
-			HashedPassword: "fakepw",
+		CredUser: model2.CredUser{
+			LoginName: "jiayi.zhang2@wustl.edu",
+			HashedPassword: "fakepw!",
 			Status:         1,
 		},
 	}
 	c := streamline.ConveyorBelt{
 		DataDomain: &dataDomain,
-		S:          nil,
+		S:          &streamline.Streamline{Name: "TestStreamline"},
 		Ctx:        context.Background(),
 		Logger:     log.GlobalLogger,
+		LogInfoGen: func(belt *streamline.ConveyorBelt) string {
+			return belt.S.Name
+		},
 	}
 
 	r := ValidateUsernamePassword(&c)

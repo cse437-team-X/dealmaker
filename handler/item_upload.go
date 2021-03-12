@@ -22,6 +22,6 @@ func ItemUpload(c *gin.Context) {
 		return
 	}
 	c.JSON(code, resp_def.UserLoginResponse{
-		Message: "Success",
+		Token: "Success",
 	})
 }

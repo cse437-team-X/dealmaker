@@ -23,7 +23,7 @@ func BuildStreamlines() {
 	signup.Add("add_user", auth.SignUp)
 
 
-	login := Factory.NewStreamline("auth/user/login", "login", "user")
+	login := Factory.NewStreamline("/auth/user/login", "login", "user")
 	login.Add("check_username_pw", auth.ValidateUsernamePassword)
 	login.Add("sign_token", auth.SignToken)
 

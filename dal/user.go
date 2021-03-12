@@ -2,25 +2,21 @@ package dal
 
 import (
 	"gitee.com/fat_marmota/infra/log"
-	"github.com/dealmaker/model/obj"
-	"gorm.io/gorm"
+	"github.com/dealmaker/model"
+	model2 "github.com/dealmaker/shared/auth/model"
+	"strconv"
 )
 
-type UserDBModel struct {
-	obj.UserInfo
-	gorm.Model
-}
-
 func MigrateUserTable() {
-	err := DB.AutoMigrate(&UserDBModel{})
+	err := DB.AutoMigrate(&model.UserCredModel{})
 	if err != nil {
 		panic(err)
 	}
 }
 
-func AddUser(user obj.UserInfo) error {
-	dbuser := &UserDBModel{
-		UserInfo: user,
+func AddCredUser(user model2.CredUser) error {
+	dbuser := &model.UserCredModel{
+		CredUser: user,
 	}
 	res := DB.Create(dbuser)
 	err := res.Error
@@ -31,8 +27,9 @@ func AddUser(user obj.UserInfo) error {
 	return nil
 }
 
-func GetUser(email string) obj.UserInfo {
-	res := UserDBModel{}
-	DB.Take(&res, "email = ?", email)
-	return res.UserInfo
+func GetCredUser(loginName string) *model2.CredUser {
+	dbRes := model.UserCredModel{}
+	DB.Take(&dbRes, "login_name = ?", loginName)
+	dbRes.SetUid(strconv.FormatUint(uint64(dbRes.ID),10))
+	return &dbRes.CredUser
 }

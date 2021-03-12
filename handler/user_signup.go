@@ -3,14 +3,20 @@ package handler
 import (
 	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/factory"
-	"github.com/dealmaker/model"
+	"github.com/dealmaker/shared/auth/model"
+	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-func UserSignup (c *gin.Context) {
+func UserSignup(c *gin.Context) {
 	s := factory.Factory.Get("/auth/user/signup")
-	domain := model.UserInfoDomain{}
+	domain := struct {
+		base.Base
+		model.CredUser
+	}{}
+
+
 	err := c.Bind(&domain)
 	if err != nil {
 		return
@@ -21,5 +27,5 @@ func UserSignup (c *gin.Context) {
 		c.AbortWithStatus(code)
 		return
 	}
-	c.Redirect(http.StatusOK, "/auth/user/login")
+	c.JSON(http.StatusOK, nil)
 }

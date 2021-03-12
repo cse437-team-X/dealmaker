@@ -10,9 +10,9 @@ import (
 
 func main() {
 	// Init begin
-	log.InitZapSugared(true, false, 2)
+	log.InitZapSugared(true, false, 1)
 	factory.BuildStreamlines()
-	dal.InitDatabaseClient("root:12345678@tcp(127.0.0.1:3306)/dealmaker", nil, "mysql")
+	dal.InitDatabaseClient("root:12345678@tcp(127.0.0.1:3306)/dealmaker?parseTime=true", nil, "mysql")
 	// Init end
 
 	r := gin.Default()
