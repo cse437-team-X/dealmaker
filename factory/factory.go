@@ -24,7 +24,7 @@ func BuildStreamlines() {
 
 
 	login := Factory.NewStreamline("/auth/user/login", "login", "user")
-	login.Add("check_username_pw", auth.ValidateUsernamePassword)
+	login.Add("check_username_pw", auth.ValidateCredUser)
 	login.Add("sign_token", auth.SignToken)
 
 	AddBaseRequestFillerToAll()

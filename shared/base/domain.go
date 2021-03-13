@@ -3,7 +3,6 @@ package base
 type Base struct {
 	BaseTime int64
 	BaseLogId string
-	BaseSessionId string
 }
 
 func (b *Base) GetTime() int64 {

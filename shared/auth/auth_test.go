@@ -12,50 +12,9 @@ import (
 )
 
 func InitForTest() {
-	log.InitZapSugared(true, false, 2)
+	log.InitZapSugared(true, false, 1)
 	dal.InitDatabaseClient("root:12345678@tcp(127.0.0.1:3306)/dealmaker", nil, "mysql")
 }
-
-func TestAuth(t *testing.T) {
-	InitForTest()
-
-	dataDomain := model2.JwtAuth{}
-	c := streamline.ConveyorBelt{
-		DataDomain: &dataDomain,
-		S:          nil,
-		Ctx:        context.Background(),
-		Logger:     log.GlobalLogger,
-	}
-
-	r := SignToken(&c)
-	require.NotNil(t, dataDomain.Token)
-	require.Equal(t, r,http.StatusOK)
-
-	r = Validate(&c)
-	require.Equal(t, r,http.StatusOK)
-
-	r = Logout(&c)
-	require.Equal(t, r,http.StatusOK)
-
-	r = Validate(&c)
-	require.Equal(t, r,http.StatusForbidden)
-}
-
-//func TestValidateUsernamePassword(t *testing.T) {
-//	log.InitZapSugared(true, false, 2)
-//	dal.InitDatabaseClient("root:12345678@tcp(127.0.0.1:3306)/dealmaker", nil, "mysql")
-//	dataDomain := model.UserInfoDomain{}
-//	dataDomain.Email = "jiayi.zhang@wustl.edu"
-//	dataDomain.HashedPassword = "fakepw"
-//	c := streamline.ConveyorBelt{
-//		DataDomain: &dataDomain,
-//		S:          nil,
-//		Ctx:        context.Background(),
-//		Logger:     log.GlobalLogger,
-//	}
-//	r := ValidateUsernamePassword(&c)
-//	require.Equal(t, r,http.StatusOK)
-//}
 
 func TestFullAuth(t *testing.T) {
 	InitForTest()
@@ -67,8 +26,8 @@ func TestFullAuth(t *testing.T) {
 
 	dataDomain := LoginDomain{
 		CredUser: model2.CredUser{
-			LoginName: "jiayi.zhang2@wustl.edu",
-			HashedPassword: "fakepw!",
+			LoginName: "jiayi.zhsdadsaadsnssg2@wustl.edu",
+			HashedPassword: "fakssaepdw!",
 			Status:         1,
 		},
 	}
@@ -82,11 +41,15 @@ func TestFullAuth(t *testing.T) {
 		},
 	}
 
-	r := ValidateUsernamePassword(&c)
+	r := ValidateCredUser(&c)
 	require.Equal(t, r, http.StatusForbidden)
 	r = SignUp(&c)
 	require.Equal(t, r, http.StatusOK)
-	r = ValidateUsernamePassword(&c)
+
+	r = SignUp(&c)
+	require.Equal(t, r, http.StatusForbidden)
+
+	r = ValidateCredUser(&c)
 	require.Equal(t, r, http.StatusOK)
 	r = SignToken(&c)
 	require.NotNil(t, dataDomain.Token)
@@ -94,6 +57,8 @@ func TestFullAuth(t *testing.T) {
 
 	r = Validate(&c)
 	require.Equal(t, r,http.StatusOK)
+
+	require.Equal(t, dataDomain.Role, "user")
 
 	r = Logout(&c)
 	require.Equal(t, r,http.StatusOK)

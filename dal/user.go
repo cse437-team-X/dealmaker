@@ -1,7 +1,6 @@
 package dal
 
 import (
-	"gitee.com/fat_marmota/infra/log"
 	"github.com/dealmaker/model"
 	model2 "github.com/dealmaker/shared/auth/model"
 	"strconv"
@@ -21,7 +20,6 @@ func AddCredUser(user model2.CredUser) error {
 	res := DB.Create(dbuser)
 	err := res.Error
 	if err != nil {
-		log.Errorw("Add user", "err", err.Error())
 		return err
 	}
 	return nil

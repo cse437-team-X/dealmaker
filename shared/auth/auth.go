@@ -19,12 +19,30 @@ func init() {
 	blockList = jwt.NewBlocklist(InvalidTokenExpireTime)
 }
 
-type JwtInterface interface {
+type CredUserInterface interface {
 	GetHashedPassword() string
+	SetHashedPassword(v string)
+
 	GetLoginName() string
+	SetLoginName(v string)
+
 	GetStatus() int
-	SetUid(string)
+	SetStatus(v int)
+
 	GetUid() string
+	SetUid(v string)
+
+	GetRole() string
+	SetRole(string)
+}
+
+
+type JwtInterface interface {
+	//GetHashedPassword() string
+	//GetLoginName() string
+	//GetStatus() int
+	//SetUid(string)
+	//GetUid() string
 	GetToken() string
 	SetToken(string)
 	GetClaims() model.TokenClaim
@@ -34,29 +52,37 @@ type JwtInterface interface {
 }
 
 func SignUp(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(model.CredUserInterface)
+	data := c.DataDomain.(CredUserInterface)
 	cuser := model.CredUser{
 		LoginName:      data.GetLoginName(),
 		HashedPassword: data.GetHashedPassword(),
 		Status:         data.GetStatus(),
+		Role:           model.RoleUser,
 	}
 
-	dal.AddCredUser(cuser)
+	err := dal.AddCredUser(cuser)
+	if err != nil {
+		c.Infow("Error", err.Error(), "req user", cuser)
+		return http.StatusForbidden
+	}
 	c.Debugw("filled CredUser", cuser)
 	return http.StatusOK
 }
 
-func ValidateUsernamePassword(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(JwtInterface)
+func ValidateCredUser(c *streamline.ConveyorBelt) int {
+	data := c.DataDomain.(CredUserInterface)
 	hpw := data.GetHashedPassword()
 	loginName := data.GetLoginName()
 
 	userInstance := dal.GetCredUser(loginName)
-	if userInstance.GetHashedPassword() != hpw {
+	if userInstance.GetHashedPassword() != hpw ||
+		userInstance.GetStatus() == model.UserStatusInvalid {
 		return http.StatusForbidden
 	}
 
 	data.SetUid(userInstance.GetUid())
+	data.SetRole(userInstance.GetRole())
+	data.SetStatus(userInstance.GetStatus())
 
 	c.Debugw("db user",userInstance)
 	return http.StatusOK
@@ -72,13 +98,13 @@ func Logout(c *streamline.ConveyorBelt) int {
 	return http.StatusOK
 }
 
-
 func SignToken(c *streamline.ConveyorBelt) int {
 	jwtdata := c.DataDomain.(JwtInterface)
+	credUserData := c.DataDomain.(CredUserInterface)
 
 	token, err := jwt.Sign(jwt.HS256, sharedKey, model.TokenClaim{
-		Uid: jwtdata.GetUid(),
-		Role: "admin",
+		Uid: credUserData.GetUid(),
+		Role: credUserData.GetRole(),
 	}, jwt.MaxAge(TokenExpireTime))
 	if err != nil {
 		panic(err)

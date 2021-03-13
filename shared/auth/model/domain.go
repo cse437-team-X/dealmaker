@@ -4,24 +4,23 @@ import (
 	"github.com/kataras/jwt"
 )
 
-type CredUserInterface interface {
-	GetHashedPassword() string
-	SetHashedPassword(v string)
-	GetLoginName() string
-	SetLoginName(v string)
-	GetStatus() int
-	SetStatus(v int)
-	GetUid() string
-	SetUid(v string)
-}
+const RoleUser = "user"
+
+const UserStatusInvalid = 0
 
 type CredUser struct {
-	Uid string
+	Uid string `gorm:"unique"`
+	Role string
 	HashedPassword string
-	LoginName      string
+	LoginName      string `gorm:"unique"`
 	Status int
 }
-
+func (u *CredUser) GetRole() string {
+	return u.Role
+}
+func (u *CredUser) SetRole(v string) {
+	u.Role = v
+}
 func (u *CredUser) GetHashedPassword() string {
 	return u.HashedPassword
 }
