@@ -7,15 +7,19 @@ type Item struct {
 	Tags []string
 }
 
-func (i *Item) GetItemDescription() string {
-	return i.Description
+func (i *Item) GetItem() *Item {
+	return i
 }
-func (i *Item) GetItemTitle() string {
-	return i.Title
-}
-func (i *Item) GetItemImageUrls() []string {
-	return i.ImageUrls
-}
-func (i *Item) GetItemTags() []string {
-	return i.Tags
-}
+//
+//func (i *Item) GetItemDescription() string {
+//	return i.Description
+//}
+//func (i *Item) GetItemTitle() string {
+//	return i.Title
+//}
+//func (i *Item) GetItemImageUrls() []string {
+//	return i.ImageUrls
+//}
+//func (i *Item) GetItemTags() []string {
+//	return i.Tags
+//}

@@ -4,9 +4,16 @@ import (
 	"github.com/kataras/jwt"
 )
 
-const RoleUser = "user"
+const (
+	UserRoleUser = "user"
+	UserRoleAdmin = "admin"
+)
 
-const UserStatusInvalid = 0
+const (
+	UserStatusInactive = 0
+	UserStatusNormal = 1
+	UserStatusOther = 2
+)
 
 type CredUser struct {
 	//Uid string `gorm:"unique"`

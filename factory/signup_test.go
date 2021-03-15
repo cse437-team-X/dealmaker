@@ -30,7 +30,7 @@ func TestSignUp(t *testing.T) {
 	dataDomain := SignUpDomain{
 		UserCredModel: auth_db.UserCredModel{
 			CredUser: model2.CredUser{
-				LoginName:      "admin",
+				LoginName:      "admin3",
 				HashedPassword: "admin",
 				Status:         1,
 			},

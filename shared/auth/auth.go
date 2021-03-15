@@ -31,7 +31,8 @@ type JwtInterface interface {
 
 func ValidateSignUp(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(CredUserInterface).GetCredUser()
-	data.Role = model.RoleUser
+	data.Role = model.UserRoleUser
+	data.Status = model.UserStatusInactive
 
 	c.Debugw("filled CredUser", data)
 	return http.StatusOK

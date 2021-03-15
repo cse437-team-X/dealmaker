@@ -31,6 +31,6 @@ func UserLogin (c *gin.Context) {
 		return
 	}
 	c.JSON(code, resp_def.UserLoginResponse{
-		Token: domain.GetToken(),
+		Token: domain.Token,
 	})
 }

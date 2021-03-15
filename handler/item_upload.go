@@ -3,14 +3,17 @@ package handler
 import (
 	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/factory"
-	"github.com/dealmaker/procedure/item_upload"
-	"github.com/dealmaker/resp_def"
+	"github.com/dealmaker/model"
+	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
 )
 
 func ItemUpload(c *gin.Context) {
 	s := factory.Factory.Get("/item/upload")
-	domain := item_upload.ItemUploadDomain{}
+	domain := struct {
+		base.Base
+		model.ItemModel
+	}{}
 	err := c.Bind(&domain)
 	if err != nil {
 		return
@@ -21,7 +24,5 @@ func ItemUpload(c *gin.Context) {
 		c.AbortWithStatus(code)
 		return
 	}
-	c.JSON(code, resp_def.UserLoginResponse{
-		Token: "Success",
-	})
+	c.JSON(code, nil)
 }
