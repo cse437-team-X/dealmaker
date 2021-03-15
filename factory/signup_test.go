@@ -4,6 +4,7 @@ import (
 	"gitee.com/fat_marmota/infra/log"
 	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/dal"
+	"github.com/dealmaker/model"
 	"github.com/dealmaker/procedure/auth_db"
 	model2 "github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
@@ -16,6 +17,7 @@ func InitForTest() {
 	log.InitZapSugared(true, false, 1)
 	dal.InitDatabaseClient("root:12345678@tcp(127.0.0.1:3306)/dealmaker?parseTime=true", nil, "mysql")
 	auth_db.InitModel()
+	model.InitItemModel()
 	BuildStreamlines()
 }
 
@@ -30,7 +32,7 @@ func TestSignUp(t *testing.T) {
 	dataDomain := SignUpDomain{
 		UserCredModel: auth_db.UserCredModel{
 			CredUser: model2.CredUser{
-				LoginName:      "admin3",
+				LoginName:      "admin4",
 				HashedPassword: "admin",
 				Status:         1,
 			},

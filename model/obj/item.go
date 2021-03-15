@@ -3,8 +3,8 @@ package obj
 type Item struct {
 	Description string
 	Title string
-	ImageUrls []string
-	Tags []string
+	ImageUrls string
+	Tags string
 }
 
 func (i *Item) GetItem() *Item {

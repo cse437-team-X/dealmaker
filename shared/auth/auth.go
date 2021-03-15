@@ -44,17 +44,6 @@ func ValidateCredUser(c *streamline.ConveyorBelt) int {
 	loginName := data.LoginName
 	c.Debugw("loginname",loginName,
 		"hashedpw",hpw)
-	//userInstance := dal.GetCredUser(loginName)
-	//if userInstance.GetHashedPassword() != hpw ||
-	//	userInstance.GetStatus() == model.UserStatusInvalid {
-	//	return http.StatusForbidden
-	//}
-	//
-	//data.SetUid(userInstance.GetUid())
-	//data.SetRole(userInstance.GetRole())
-	//data.SetStatus(userInstance.GetStatus())
-
-	//c.Debugw("db user",userInstance)
 	return http.StatusOK
 }
 
