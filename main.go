@@ -5,6 +5,7 @@ import (
 	"github.com/dealmaker/dal"
 	"github.com/dealmaker/factory"
 	"github.com/dealmaker/handler"
+	"github.com/dealmaker/procedure/auth_db"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,6 +14,8 @@ func main() {
 	log.InitZapSugared(true, false, 1)
 	factory.BuildStreamlines()
 	dal.InitDatabaseClient("root:12345678@tcp(127.0.0.1:3306)/dealmaker?parseTime=true", nil, "mysql")
+
+	auth_db.InitModel()
 	// Init end
 
 	r := gin.Default()

@@ -2,10 +2,11 @@ package auth
 
 import (
 	"gitee.com/fat_marmota/streamline"
-	"github.com/dealmaker/dal"
+	"github.com/dealmaker/procedure/auth_db"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/kataras/jwt"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -20,77 +21,45 @@ func init() {
 }
 
 type CredUserInterface interface {
-	GetHashedPassword() string
-	SetHashedPassword(v string)
-
-	GetLoginName() string
-	SetLoginName(v string)
-
-	GetStatus() int
-	SetStatus(v int)
-
-	GetUid() string
-	SetUid(v string)
-
-	GetRole() string
-	SetRole(string)
+	GetCredUser() *model.CredUser
 }
 
 
 type JwtInterface interface {
-	//GetHashedPassword() string
-	//GetLoginName() string
-	//GetStatus() int
-	//SetUid(string)
-	//GetUid() string
-	GetToken() string
-	SetToken(string)
-	GetClaims() model.TokenClaim
-	SetClaims(model.TokenClaim)
-	SetVerifiedToken(*jwt.VerifiedToken)
-	GetVerifiedToken() *jwt.VerifiedToken
+	GetJwtAuth() *model.JwtAuth
 }
 
-func SignUp(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(CredUserInterface)
-	cuser := model.CredUser{
-		LoginName:      data.GetLoginName(),
-		HashedPassword: data.GetHashedPassword(),
-		Status:         data.GetStatus(),
-		Role:           model.RoleUser,
-	}
+func ValidateSignUp(c *streamline.ConveyorBelt) int {
+	data := c.DataDomain.(CredUserInterface).GetCredUser()
+	data.Role = model.RoleUser
 
-	err := dal.AddCredUser(cuser)
-	if err != nil {
-		c.Infow("Error", err.Error(), "req user", cuser)
-		return http.StatusForbidden
-	}
-	c.Debugw("filled CredUser", cuser)
+	c.Debugw("filled CredUser", data)
 	return http.StatusOK
 }
 
 func ValidateCredUser(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(CredUserInterface)
-	hpw := data.GetHashedPassword()
-	loginName := data.GetLoginName()
+	data := c.DataDomain.(CredUserInterface).GetCredUser()
+	hpw := data.HashedPassword
+	loginName := data.LoginName
+	c.Debugw("loginname",loginName,
+		"hashedpw",hpw)
+	//userInstance := dal.GetCredUser(loginName)
+	//if userInstance.GetHashedPassword() != hpw ||
+	//	userInstance.GetStatus() == model.UserStatusInvalid {
+	//	return http.StatusForbidden
+	//}
+	//
+	//data.SetUid(userInstance.GetUid())
+	//data.SetRole(userInstance.GetRole())
+	//data.SetStatus(userInstance.GetStatus())
 
-	userInstance := dal.GetCredUser(loginName)
-	if userInstance.GetHashedPassword() != hpw ||
-		userInstance.GetStatus() == model.UserStatusInvalid {
-		return http.StatusForbidden
-	}
-
-	data.SetUid(userInstance.GetUid())
-	data.SetRole(userInstance.GetRole())
-	data.SetStatus(userInstance.GetStatus())
-
-	c.Debugw("db user",userInstance)
+	//c.Debugw("db user",userInstance)
 	return http.StatusOK
 }
 
 func Logout(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(JwtInterface)
-	token := data.GetVerifiedToken()
+	data := c.DataDomain.(JwtInterface).GetJwtAuth()
+	token := data.VToken
 	err := blockList.InvalidateToken(token.Token, token.StandardClaims)
 	if err != nil {
 		panic(err)
@@ -99,24 +68,24 @@ func Logout(c *streamline.ConveyorBelt) int {
 }
 
 func SignToken(c *streamline.ConveyorBelt) int {
-	jwtdata := c.DataDomain.(JwtInterface)
-	credUserData := c.DataDomain.(CredUserInterface)
+	jwtdata := c.DataDomain.(JwtInterface).GetJwtAuth()
+	credUserData := c.DataDomain.(auth_db.AuthDBInterface).GetUserCredModel()
 
 	token, err := jwt.Sign(jwt.HS256, sharedKey, model.TokenClaim{
-		Uid: credUserData.GetUid(),
-		Role: credUserData.GetRole(),
+		Uid: strconv.FormatUint(uint64(credUserData.ID),10),
+		Role: credUserData.Role,
 	}, jwt.MaxAge(TokenExpireTime))
 	if err != nil {
 		panic(err)
 	}
 
-	jwtdata.SetToken(string(token))
+	jwtdata.Token = string(token)
 	return http.StatusOK
 }
 
 func Validate(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(JwtInterface)
-	token := data.GetToken()
+	data := c.DataDomain.(JwtInterface).GetJwtAuth()
+	token := data.Token
 
 	vtoken,err := jwt.Verify(jwt.HS256, sharedKey, []byte(token), blockList)
 	if err != nil {
@@ -128,12 +97,12 @@ func Validate(c *streamline.ConveyorBelt) int {
 		return http.StatusForbidden
 	}
 
-	data.SetClaims(myclaims)
-	data.SetVerifiedToken(vtoken)
+	data.TokenClaim = myclaims
+	data.VToken = vtoken
 
 	c.Debugw(
 		"token", token,
-		"claims", c.DataDomain.(JwtInterface).GetClaims())
+		"claims", c.DataDomain.(JwtInterface).GetJwtAuth().TokenClaim)
 
 	return http.StatusOK
 }

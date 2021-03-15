@@ -3,7 +3,7 @@ package handler
 import (
 	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/factory"
-	"github.com/dealmaker/shared/auth/model"
+	"github.com/dealmaker/procedure/auth_db"
 	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -13,7 +13,7 @@ func UserSignup(c *gin.Context) {
 	s := factory.Factory.Get("/auth/user/signup")
 	domain := struct {
 		base.Base
-		model.CredUser
+		auth_db.UserCredModel
 	}{}
 
 

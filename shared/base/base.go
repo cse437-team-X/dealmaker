@@ -3,7 +3,6 @@ package base
 import (
 	"fmt"
 	"gitee.com/fat_marmota/streamline"
-	"github.com/gin-gonic/gin"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -44,7 +43,7 @@ func BaseRequestFiller(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(BaseInterface)
 	reqTime := time.Now()
 	data.SetTime(reqTime.Unix())
-	data.SetLogId(genLogId(c, reqTime, c.Ctx.(*gin.Context).ClientIP()))
+	data.SetLogId(genLogId(c, reqTime, "fakeip"))//c.Ctx.(*gin.Context).ClientIP()))
 
 	return http.StatusOK
 }
