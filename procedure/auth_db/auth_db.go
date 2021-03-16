@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func InitModel()  {
+func InitUserCredModel()  {
 	err := dal.DB.AutoMigrate(&UserCredModel{})
 	if err != nil {
 		panic(err)

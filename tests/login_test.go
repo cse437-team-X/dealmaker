@@ -1,11 +1,10 @@
-package factory
+package tests
 
 import (
 	"gitee.com/fat_marmota/infra/log"
 	"gitee.com/fat_marmota/streamline"
-	"github.com/dealmaker/procedure/auth_db"
-	"github.com/dealmaker/shared/auth/model"
-	"github.com/dealmaker/shared/base"
+	"github.com/dealmaker/factory"
+	"github.com/dealmaker/handler"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -13,18 +12,14 @@ import (
 func TestLogin(t *testing.T) {
 	InitForTest()
 
-	dataDomain := struct {
-		base.Base
-		model.JwtAuth
-		auth_db.UserCredModel
-	}{}
+	dataDomain := handler.UserLoginDomain{}
 
 	dataDomain.LoginName = "admin"
 	dataDomain.HashedPassword = "admin"
 
 	c := streamline.ConveyorBelt{
 		DataDomain: &dataDomain,
-		S:          Factory.Get("/auth/user/login"),
+		S:          factory.Factory.Get("/auth/user/login"),
 		Ctx:        nil,
 		Logger:     log.GlobalLogger,
 		LogInfoGen: func(belt *streamline.ConveyorBelt) string {

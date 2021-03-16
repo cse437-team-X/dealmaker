@@ -9,13 +9,14 @@ import (
 	"net/http"
 )
 
+type UserSignupDomain struct {
+	base.Base
+	auth_db.UserCredModel
+}
+
 func UserSignup(c *gin.Context) {
 	s := factory.Factory.Get("/auth/user/signup")
-	domain := struct {
-		base.Base
-		auth_db.UserCredModel
-	}{}
-
+	domain := UserSignupDomain{}
 
 	err := c.Bind(&domain)
 	if err != nil {

@@ -16,6 +16,7 @@ func init() {
 
 func BuildStreamlines() {
 	itemUpload := Factory.NewStreamline("/item/upload", "upload", "item")
+	itemUpload.Add("val", auth.Validate)
 	itemUpload.Add("rua", item_upload.InsertItem)
 
 	signup := Factory.NewStreamline("/auth/user/signup", "signup", "user")

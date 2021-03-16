@@ -10,13 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type UserLoginDomain struct {
+	base.Base
+	auth_db.UserCredModel
+	model.JwtAuth
+}
+
 func UserLogin (c *gin.Context) {
 	s := factory.Factory.Get("/auth/user/login")
-	domain := struct {
-		base.Base
-		auth_db.UserCredModel
-		model.JwtAuth
-	}{}
+	domain := UserLoginDomain{}
 	err := c.Bind(&domain)
 
 	if err != nil {

@@ -4,16 +4,21 @@ import (
 	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/factory"
 	"github.com/dealmaker/model"
+	model2 "github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
 )
 
+type UploadItemDomain struct {
+	base.Base
+	model2.JwtAuth
+	model.Item
+}
+
 func ItemUpload(c *gin.Context) {
 	s := factory.Factory.Get("/item/upload")
-	domain := struct {
-		base.Base
-		model.ItemModel
-	}{}
+
+	domain := UploadItemDomain{}
 	err := c.Bind(&domain)
 	if err != nil {
 		return

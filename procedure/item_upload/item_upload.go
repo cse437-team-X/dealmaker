@@ -4,12 +4,11 @@ import (
 	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/dal"
 	"github.com/dealmaker/model"
-	"github.com/dealmaker/model/obj"
 	"net/http"
 )
 
 type GetItemInterface interface {
-	GetItem() *obj.Item
+	GetItem() *model.Item
 }
 
 func InsertItem(c *streamline.ConveyorBelt) int {
@@ -20,12 +19,24 @@ func InsertItem(c *streamline.ConveyorBelt) int {
 		"urls", data.ImageUrls,
 		"tags", data.Tags)
 	
-	dbItem := model.ItemModel{
-		Item: *data,
+	dbItem := ItemModel{
+		Description: data.Description,
+		Title: data.Title,
 	}
 
-	res := dal.DB.Create(&dbItem)
-	err := res.Error
+	err := dal.DB.Create(&dbItem).Error
+	if err != nil {
+		return http.StatusInternalServerError
+	}
+
+	var tagsModel []TagsModel
+	for _, v :=range data.Tags {
+		tagsModel = append(tagsModel, TagsModel{
+			ItemId: dbItem.ID,
+			Tag:    v,
+		})
+	}
+	err = dal.DB.Create(&tagsModel).Error
 	if err != nil {
 		return http.StatusInternalServerError
 	}
