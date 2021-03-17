@@ -18,11 +18,13 @@ func TestQueryItem(t *testing.T) {
 	item_upload.InitTagsModel()
 
 
-	dataDomain := ItemFilter{
-		Uploader:  0,
-		Tags:      []string{"B"},
-		BeginTime: time.Unix(0,0),
-		EndTime:   time.Unix(0,0),
+	dataDomain := ItemGet{
+		ItemFilter:ItemFilter{
+			Uploader:  0,
+			Tags:      []string{"B"},
+			BeginTime: time.Unix(0,0),
+			EndTime:   time.Unix(0,0),
+		},
 	}
 
 	c := streamline.ConveyorBelt{

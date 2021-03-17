@@ -8,7 +8,7 @@ import (
 	"github.com/dealmaker/handler"
 	"github.com/dealmaker/procedure/auth_db"
 	"github.com/dealmaker/procedure/item_upload"
-	model2 "github.com/dealmaker/shared/auth/model"
+	"github.com/dealmaker/shared/auth/model"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -28,7 +28,7 @@ func TestSignUp(t *testing.T) {
 
 	dataDomain := handler.UserSignupDomain{
 		UserCredModel: auth_db.UserCredModel{
-			CredUser: model2.CredUser{
+			CredUser: model.CredUser{
 				LoginName:      "admin4",
 				HashedPassword: "admin",
 				Status:         1,

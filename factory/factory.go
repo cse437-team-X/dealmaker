@@ -3,6 +3,7 @@ package factory
 import (
 	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/procedure/auth_db"
+	"github.com/dealmaker/procedure/item_get"
 	"github.com/dealmaker/procedure/item_upload"
 	"github.com/dealmaker/shared/auth"
 	"github.com/dealmaker/shared/base"
@@ -15,6 +16,9 @@ func init() {
 }
 
 func BuildStreamlines() {
+	itemGet := Factory.NewStreamline("/item/get", "get", "item")
+	itemGet.Add("query items", item_get.QueryItem)
+
 	itemUpload := Factory.NewStreamline("/item/upload", "upload", "item")
 	itemUpload.Add("val", auth.Validate)
 	itemUpload.Add("rua", item_upload.InsertItem)
