@@ -4,6 +4,7 @@ import (
 	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/dal"
 	"github.com/dealmaker/model"
+	"github.com/dealmaker/shared/auth"
 	"net/http"
 )
 
@@ -13,6 +14,7 @@ type GetItemInterface interface {
 
 func InsertItem(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(GetItemInterface).GetItem()
+	jwtData := c.DataDomain.(auth.JwtInterface).GetJwtAuth()
 	c.Debugw(
 		"desc",data.Description,
 		"title", data.Title,
@@ -22,6 +24,7 @@ func InsertItem(c *streamline.ConveyorBelt) int {
 	dbItem := ItemModel{
 		Description: data.Description,
 		Title: data.Title,
+		Uploader: jwtData.TokenClaim.Uid,
 	}
 
 	err := dal.DB.Create(&dbItem).Error

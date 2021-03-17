@@ -19,6 +19,7 @@ func InitTagsModel() {
 }
 
 type ItemModel struct {
+	Uploader uint
 	Description string
 	Title string
 	gorm.Model

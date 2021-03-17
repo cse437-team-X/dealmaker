@@ -6,7 +6,6 @@ import (
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/kataras/jwt"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -62,7 +61,7 @@ func SignToken(c *streamline.ConveyorBelt) int {
 	credUserData := c.DataDomain.(auth_db.AuthDBInterface).GetUserCredModel()
 
 	token, err := jwt.Sign(jwt.HS256, sharedKey, model.TokenClaim{
-		Uid: strconv.FormatUint(uint64(credUserData.ID),10),
+		Uid: credUserData.ID,
 		Role: credUserData.Role,
 	}, jwt.MaxAge(TokenExpireTime))
 	if err != nil {

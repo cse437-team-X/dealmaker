@@ -88,7 +88,7 @@ func (j *JwtAuth) GetJwtAuth() *JwtAuth {
 //}
 
 type TokenClaim struct {
-	Uid string
+	Uid uint
 	Role string
 }
 
