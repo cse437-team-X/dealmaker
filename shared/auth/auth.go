@@ -41,8 +41,7 @@ func ValidateCredUser(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(CredUserInterface).GetCredUser()
 	hpw := data.HashedPassword
 	loginName := data.LoginName
-	c.Debugw("loginname", loginName,
-		"hashedpw", hpw)
+	c.Debugw("loginname", loginName, "hashedpw", hpw)
 	return http.StatusOK
 }
 
@@ -95,5 +94,11 @@ func Validate(c *streamline.ConveyorBelt) int {
 		"token", token,
 		"claims", c.DataDomain.(JwtInterface).GetJwtAuth().TokenClaim)
 
+	return http.StatusOK
+}
+
+func SetRecoverRole(c *streamline.ConveyorBelt) int {
+	data := c.DataDomain.(auth_db.AuthDBInterface).GetUserCredModel()
+	data.Role = "recover"
 	return http.StatusOK
 }

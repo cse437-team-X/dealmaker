@@ -8,13 +8,6 @@ import (
 	"net/http"
 )
 
-type itemTagModel struct {
-	ID uint
-	Description string
-	Title string
-	Tag string
-}
-
 type ItemGetResult struct {
 	Result []model.Item
 }
@@ -51,7 +44,6 @@ func QueryItem(c *streamline.ConveyorBelt) int {
 		mongoFilter["tags"] = bson.M{"$in":filter.Tags}
 	}
 	c.Infow("filter", mongoFilter)
-	//query := dal.DB.Table(dal.TableItem).Select("description, title, tag, item_models.id").Joins("JOIN "+dal.TableTags + " a ON a.item_id = "+dal.TableItem+".id")
 	cursor, err := dal.ItemCollection.Find(c.Ctx, mongoFilter)
 	if err != nil {
 		c.Errorw("Read Item Collection", err)
