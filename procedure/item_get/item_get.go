@@ -3,7 +3,9 @@ package item_get
 import (
 	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/dal"
-	"time"
+	"github.com/dealmaker/model"
+	"go.mongodb.org/mongo-driver/bson"
+	"net/http"
 )
 
 type itemTagModel struct {
@@ -14,15 +16,15 @@ type itemTagModel struct {
 }
 
 type ItemGetResult struct {
-	Result []itemTagModel
+	Result []model.Item
 }
 
 // None nil conditions will be connected with ANDs
 type ItemFilter struct {
 	Uploader uint
 	Tags []string
-	BeginTime time.Time
-	EndTime time.Time
+	//BeginTime time.Time
+	//EndTime time.Time
 	//FuzzyTitle string
 }
 
@@ -41,22 +43,30 @@ type ItemGetInterface interface {
 func QueryItem(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(ItemGetInterface).GetItemGet()
 	filter := data.ItemFilter
-	query := dal.DB.Table(dal.TableItem).Select("description, title, tag, item_models.id").Joins("JOIN "+dal.TableTags + " a ON a.item_id = "+dal.TableItem+".id")
-	if filter.Uploader > 0 {
-		query = query.Where("uploader = ?", filter.Uploader)
+	mongoFilter := bson.M{}
+	if filter.Uploader != 0 {
+		mongoFilter["uploader"] = filter.Uploader
 	}
-	if len(filter.Tags) > 0 {
-		query = query.Where("a.tag IN (?)", filter.Tags)
+	if filter.Tags != nil {
+		mongoFilter["tags"] = bson.M{"$in":filter.Tags}
 	}
-	if filter.BeginTime.Unix() > 0 {
-		query = query.Where("updated_at >= ?", filter.BeginTime)
-	}
-	if filter.EndTime.Unix() > 0 {
-		query = query.Where("updated_at <= ?", filter.EndTime)
+	c.Infow("filter", mongoFilter)
+	//query := dal.DB.Table(dal.TableItem).Select("description, title, tag, item_models.id").Joins("JOIN "+dal.TableTags + " a ON a.item_id = "+dal.TableItem+".id")
+	cursor, err := dal.ItemCollection.Find(c.Ctx, mongoFilter)
+	if err != nil {
+		c.Errorw("Read Item Collection", err)
+		return http.StatusInternalServerError
 	}
 
-	query.Scan(&data.Result)
+	var dbRes []model.Item
+	if err = cursor.All(c.Ctx, &dbRes); err != nil {
+		c.Errorw("Read Item Collection", err)
+		return http.StatusInternalServerError
+	}
+	//
+	//c.Debugw("res", dbRes)
 
+	data.Result = dbRes
 	c.Debugw("vals", data.Result)
 	return 200
 }

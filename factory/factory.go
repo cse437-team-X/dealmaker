@@ -7,6 +7,7 @@ import (
 	"github.com/dealmaker/procedure/item_upload"
 	"github.com/dealmaker/shared/auth"
 	"github.com/dealmaker/shared/base"
+	"time"
 )
 
 var Factory *streamline.Factory
@@ -31,7 +32,7 @@ func BuildStreamlines() {
 	login := Factory.NewStreamline("/auth/user/login", "login", "user")
 	login.Add("check_username_pw", auth.ValidateCredUser)
 	login.Add("get user form db", auth_db.GetUser)
-	login.Add("sign_token", auth.SignToken)
+	login.Add("sign_token", auth.SignTokenWithTokenExpireTime(10 * time.Minute))
 
 
 

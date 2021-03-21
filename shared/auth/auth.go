@@ -13,6 +13,7 @@ var blockList *jwt.Blocklist
 
 const InvalidTokenExpireTime = 15 * time.Minute
 const TokenExpireTime = 10 * time.Minute
+
 var sharedKey = []byte("p@ssw0rd")
 
 func init() {
@@ -22,7 +23,6 @@ func init() {
 type CredUserInterface interface {
 	GetCredUser() *model.CredUser
 }
-
 
 type JwtInterface interface {
 	GetJwtAuth() *model.JwtAuth
@@ -41,8 +41,8 @@ func ValidateCredUser(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(CredUserInterface).GetCredUser()
 	hpw := data.HashedPassword
 	loginName := data.LoginName
-	c.Debugw("loginname",loginName,
-		"hashedpw",hpw)
+	c.Debugw("loginname", loginName,
+		"hashedpw", hpw)
 	return http.StatusOK
 }
 
@@ -56,27 +56,29 @@ func Logout(c *streamline.ConveyorBelt) int {
 	return http.StatusOK
 }
 
-func SignToken(c *streamline.ConveyorBelt) int {
-	jwtdata := c.DataDomain.(JwtInterface).GetJwtAuth()
-	credUserData := c.DataDomain.(auth_db.AuthDBInterface).GetUserCredModel()
+func SignTokenWithTokenExpireTime(t time.Duration) func(c *streamline.ConveyorBelt) int {
+	return func(c *streamline.ConveyorBelt) int {
+		jwtdata := c.DataDomain.(JwtInterface).GetJwtAuth()
+		credUserData := c.DataDomain.(auth_db.AuthDBInterface).GetUserCredModel()
 
-	token, err := jwt.Sign(jwt.HS256, sharedKey, model.TokenClaim{
-		Uid: credUserData.ID,
-		Role: credUserData.Role,
-	}, jwt.MaxAge(TokenExpireTime))
-	if err != nil {
-		panic(err)
+		token, err := jwt.Sign(jwt.HS256, sharedKey, model.TokenClaim{
+			Uid:  credUserData.ID,
+			Role: credUserData.Role,
+		}, jwt.MaxAge(t))
+		if err != nil {
+			panic(err)
+		}
+
+		jwtdata.Token = string(token)
+		return http.StatusOK
 	}
-
-	jwtdata.Token = string(token)
-	return http.StatusOK
 }
 
 func Validate(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(JwtInterface).GetJwtAuth()
 	token := data.Token
 
-	vtoken,err := jwt.Verify(jwt.HS256, sharedKey, []byte(token), blockList)
+	vtoken, err := jwt.Verify(jwt.HS256, sharedKey, []byte(token), blockList)
 	if err != nil {
 		return http.StatusForbidden
 	}

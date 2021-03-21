@@ -20,27 +20,12 @@ func InsertItem(c *streamline.ConveyorBelt) int {
 		"title", data.Title,
 		"urls", data.ImageUrls,
 		"tags", data.Tags)
-	
-	dbItem := ItemModel{
-		Description: data.Description,
-		Title: data.Title,
-		Uploader: jwtData.TokenClaim.Uid,
-	}
 
-	err := dal.DB.Create(&dbItem).Error
-	if err != nil {
-		return http.StatusInternalServerError
-	}
+	data.Uploader = jwtData.Uid
 
-	var tagsModel []TagsModel
-	for _, v :=range data.Tags {
-		tagsModel = append(tagsModel, TagsModel{
-			ItemId: dbItem.ID,
-			Tag:    v,
-		})
-	}
-	err = dal.DB.Create(&tagsModel).Error
+	_, err := dal.ItemCollection.InsertOne(c.Ctx, data)
 	if err != nil {
+		c.Errorw("Insert item", err)
 		return http.StatusInternalServerError
 	}
 	return http.StatusOK

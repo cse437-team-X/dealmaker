@@ -5,6 +5,7 @@ type Item struct {
 	Title string
 	ImageUrls []string
 	Tags []string
+	Uploader uint
 }
 
 func (i *Item) GetItem() *Item {

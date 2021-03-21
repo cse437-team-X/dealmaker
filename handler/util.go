@@ -8,6 +8,6 @@ import (
 
 func GenLogMeta(c *streamline.ConveyorBelt) string {
 	d := c.DataDomain.(base.BaseInterface)
-	res := fmt.Sprintf("%s %s", c.S.Name, d.GetLogId())
+	res := fmt.Sprintf("%s %s", c.S.Name, d.GetBase().BaseLogId)
 	return res
 }

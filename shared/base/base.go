@@ -10,10 +10,7 @@ import (
 )
 
 type BaseInterface interface {
-	GetTime() int64
-	SetTime(int64)
-	GetLogId() string
-	SetLogId(string)
+	GetBase() *Base
 }
 
 const MAX_RAND_VAL = 8192
@@ -30,10 +27,9 @@ func genLogId(c *streamline.ConveyorBelt, t time.Time) string {
 }
 
 func BaseRequestFiller(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(BaseInterface)
+	data := c.DataDomain.(BaseInterface).GetBase()
 	reqTime := time.Now()
-	data.SetTime(reqTime.Unix())
-	data.SetLogId(genLogId(c, reqTime))//c.Ctx.(*gin.Context).ClientIP()))
-
+	data.BaseTime = reqTime.Unix()
+	data.BaseLogId = genLogId(c, reqTime)
 	return http.StatusOK
 }

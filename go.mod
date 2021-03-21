@@ -25,7 +25,7 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/ugorji/go v1.2.4 // indirect
 	go.etcd.io/bbolt v1.3.5 // indirect
-	go.mongodb.org/mongo-driver v1.4.6 // indirect
+	go.mongodb.org/mongo-driver v1.5.0
 	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83 // indirect
 	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb // indirect
 	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
