@@ -18,12 +18,14 @@ type UserLoginDomain struct {
 
 func UserLogin (c *gin.Context) {
 	s := factory.Factory.Get("/auth/user/login")
-	domain := UserLoginDomain{}
-	err := c.Bind(&domain)
+	loginName := c.Query("username")
 
-	if err != nil {
-		return
-	}
+	domain := UserLoginDomain{}
+	//err := c.Bind(&domain)
+	domain.LoginName = loginName
+	//if err != nil {
+	//	return
+	//}
 	conv := streamline.NewConveyorBelt(s, c, &domain, GenLogMeta)
 
 	conv.Debugw("domain",domain)

@@ -92,12 +92,12 @@ func Validate(c *streamline.ConveyorBelt) int {
 
 	c.Debugw(
 		"token", token,
-		"claims", c.DataDomain.(JwtInterface).GetJwtAuth().TokenClaim)
+		"claims", vtoken.StandardClaims)
 
 	return http.StatusOK
 }
 
-func SetRecoverRole(c *streamline.ConveyorBelt) int {
+func SetRecover(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(auth_db.AuthDBInterface).GetUserCredModel()
 	data.Role = "recover"
 	return http.StatusOK

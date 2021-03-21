@@ -37,6 +37,7 @@ func BuildStreamlines() {
 	recoverPw := Factory.NewStreamline("/auth/user/recover", "recover", "user")
 	//recoverPw.Add("check_username_pw", auth.ValidateCredUser)
 	recoverPw.Add("get user form db", auth_db.GetUser)
+	recoverPw.Add("set recover", auth.SetRecover)
 	recoverPw.Add("sign_token", auth.SignTokenWithTokenExpireTime(time.Hour * 24))
 
 
