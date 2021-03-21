@@ -1,13 +1,16 @@
 # Deal Maker (Better market)
 This project adapted a hopefully novel method of developing a REST-API. The method is currently named "Factory - Streamline - Conveyor belt" pattern. Document about the pattern can be found in https://github.com/itzMeerkat/streamline. Please read the `README` of that repo first before continue.
 
+## Project Status
+Current version of dealmaker should work with v0.0.1 of both `streamline` and `mentally-friendly-infra`. Please change `go.mod` yourself and have a try!
+
 ## Folders
-+ dal: Data access layer, all database accessing should be located here.
++ dal: Database connection initialization and some related constants.
 + factory: To assemble streamlines. In the very long future this will be replaced by code generation.
 + handler: Each file should contain exactly one function, matching the `gin` handler function signature. Functions have a one-one relation to APIs.
-+ model: Data model definitions
++ model: Your business data model definitions.
 + procedure: Contains multiple sub-modules. Each one is an individual procedure. As for to what extend it should be considered a procedure? I don't have a conclusion yet, please discuss your thought with me.
-+ resp_def: Define all `JSON` responses.
++ resp_def: Define all `JSON` responses. (Not completed yet)
 + shared: Some procedures I think could be used in other projects, will become standalone package when they reach a stable state.
 
 ## Naming
