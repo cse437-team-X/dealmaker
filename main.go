@@ -17,6 +17,7 @@ func main() {
 	dal.InitMongoDB()
 	email.InitEmailClient()
 	auth_db.InitUserCredModel()
+	email.InitEmailClient()
 	//item_upload.InitItemModel()
 	//item_upload.InitTagsModel()
 
