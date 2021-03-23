@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/dealmaker/dal"
 	"github.com/dealmaker/factory"
 	"github.com/dealmaker/handler"
@@ -8,13 +9,54 @@ import (
 	"github.com/dealmaker/procedure/email"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/itzmeerkat/mentally-friendly-infra/config"
 	"github.com/itzmeerkat/mentally-friendly-infra/log"
 )
 
+type MySqlConfig struct {
+	Username string `yaml:"Username"`
+	Password string `yaml:"Password"`
+	Database string `yaml:"Database"`
+	Address string `yaml:"Address"`
+}
+func (m *MySqlConfig) GetMasterDSN() string {
+	return fmt.Sprintf("%s:%s@(%s)/%s?parseTime=true", m.Username, m.Password, m.Address, m.Database)
+}
+
+type EnvConfig struct {
+	DEALMAKER_ENV string
+}
+func (e *EnvConfig) IsProd() bool {
+	return e.DEALMAKER_ENV == "prod"
+}
+
+type SendGridConfig struct {
+	SENDGRID_API_KEY string
+}
+
+type AllConfig struct {
+	MySqlConfig
+	SendGridConfig
+	EnvConfig
+}
+
+var conf AllConfig
+func LoadConfigs() {
+	config.LoadEnvVar(&conf.EnvConfig)
+	if conf.EnvConfig.DEALMAKER_ENV == "" {
+		panic("Set environment before launch")
+	}
+	confPath := "./conf/" + conf.EnvConfig.DEALMAKER_ENV +".yml"
+	config.LoadConfigFile(confPath, &conf.MySqlConfig)
+	config.LoadEnvVar(&conf.SendGridConfig)
+	fmt.Println(conf)
+}
+
 func main() {
+	LoadConfigs()
 	// Init begin
-	log.InitZapSugared(true, false, 1)
-	dal.InitDatabaseClient("root:6be6a9019e03ff2f@tcp(127.0.0.1:3306)/dealmaker?parseTime=true", nil, "mysql")
+	log.InitZapSugared(true, conf.EnvConfig.IsProd(), 1)
+	dal.InitDatabaseClient(conf.MySqlConfig.GetMasterDSN(), nil, "mysql")
 	dal.InitMongoDB()
 	email.InitEmailClient()
 	auth_db.InitUserCredModel()

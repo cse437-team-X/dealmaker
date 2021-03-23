@@ -1,0 +1,5 @@
+MySqlConfig:
+  Username: root
+  Password: 6be6a9019e03ff2f
+  Database: dealmaker
+  Address: 127.0.0.1:3306
