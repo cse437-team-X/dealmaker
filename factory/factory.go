@@ -2,6 +2,7 @@ package factory
 
 import (
 	"github.com/dealmaker/procedure/auth_db"
+	"github.com/dealmaker/procedure/email"
 	"github.com/dealmaker/procedure/item_get"
 	"github.com/dealmaker/procedure/item_upload"
 	"github.com/dealmaker/shared/auth"
@@ -39,6 +40,7 @@ func BuildStreamlines() {
 	recoverPw.Add("get user form db", auth_db.GetUser)
 	recoverPw.Add("set recover", auth.SetRecover)
 	recoverPw.Add("sign_token", auth.SignTokenWithTokenExpireTime(time.Hour * 24))
+	recoverPw.Add("send email", email.SendEmail)
 
 
 	AddBaseRequestFillerToAll()

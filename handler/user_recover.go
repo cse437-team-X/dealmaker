@@ -1,10 +1,9 @@
 package handler
 
 import (
-	"github.com/itzmeerkat/streamline"
 	"github.com/dealmaker/factory"
-	"github.com/dealmaker/resp_def"
 	"github.com/gin-gonic/gin"
+	"github.com/itzmeerkat/streamline"
 )
 
 func UserRecover (c *gin.Context) {
@@ -24,7 +23,4 @@ func UserRecover (c *gin.Context) {
 		c.AbortWithStatus(code)
 		return
 	}
-	c.JSON(code, resp_def.UserLoginResponse{
-		Token: domain.Token,
-	})
 }
