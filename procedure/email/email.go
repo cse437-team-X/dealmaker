@@ -23,9 +23,9 @@ func SendEmail(c *streamline.ConveyorBelt) int {
 	token := c.DataDomain.(auth.JwtInterface).GetJwtAuth()
 	from := mail.NewEmail("Dealmaker Admin", "jiayi.zhang@wustl.edu")
 	subject := "YOUR PASSWORD RECOVERY LINK"
-	to := mail.NewEmail(data.LoginName, data.LoginName)
-	plainTextContent := "You will be able to use this TOKEN to reset your password:" + token.Token
-	htmlContent := "You will be able to use this TOKEN to reset your password:" + token.Token
+	to := mail.NewEmail(data.LoginName, data.LoginName+"@wustl.edu")
+	plainTextContent := "Hi, "+data.LoginName+"You will be able to use this TOKEN to reset your password:" + token.Token
+	htmlContent := "Hi, "+data.LoginName+"You will be able to use this TOKEN to reset your password:" + token.Token
 	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
 
 	response, err := client.Send(message)
