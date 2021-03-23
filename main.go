@@ -5,6 +5,7 @@ import (
 	"github.com/dealmaker/factory"
 	"github.com/dealmaker/handler"
 	"github.com/dealmaker/procedure/auth_db"
+	"github.com/dealmaker/procedure/email"
 	"github.com/gin-gonic/gin"
 	"github.com/itzmeerkat/mentally-friendly-infra/log"
 )
@@ -15,6 +16,7 @@ func main() {
 	dal.InitDatabaseClient("root:12345678@tcp(127.0.0.1:3306)/dealmaker?parseTime=true", nil, "mysql")
 	dal.InitMongoDB()
 	auth_db.InitUserCredModel()
+	email.InitEmailClient()
 	//item_upload.InitItemModel()
 	//item_upload.InitTagsModel()
 
