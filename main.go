@@ -6,6 +6,7 @@ import (
 	"github.com/dealmaker/handler"
 	"github.com/dealmaker/procedure/auth_db"
 	"github.com/dealmaker/procedure/email"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/itzmeerkat/mentally-friendly-infra/log"
 )
@@ -28,6 +29,7 @@ func main() {
 
 	//store := memstore.NewStore([]byte("secret"))
 	//r.Use(sessions.Sessions("user_info", store))
+	r.Use(cors.Default())
 
 	r.POST("/auth/user/signup", handler.UserSignup)
 	r.POST("/auth/user/login", handler.UserLogin)
