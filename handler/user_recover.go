@@ -12,6 +12,7 @@ func UserRecover (c *gin.Context) {
 	loginName := c.Query("username")
 	//err := c.Bind(&domain)
 	domain.LoginName = loginName
+	domain.Scope = "recover"
 	//if err != nil {
 	//	return
 	//}

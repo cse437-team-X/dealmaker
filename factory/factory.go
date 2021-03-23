@@ -26,12 +26,12 @@ func BuildStreamlines() {
 	itemUpload.Add("rua", item_upload.InsertItem)
 
 	signup := Factory.NewStreamline("/auth/user/signup", "signup", "user")
-	//signup.Add("validate signup req", auth.ValidateSignUp)
 	signup.Add("insert to db", auth_db.InsertUser)
+	signup.Add("sign_token", auth.SignTokenWithTokenExpireTime(time.Hour * 24))
+	signup.Add("send activation email", email.SendActivationEmail)
 
 
 	login := Factory.NewStreamline("/auth/user/login", "login", "user")
-	//login.Add("check_username_pw", auth.ValidateCredUser)
 	login.Add("get user form db", auth_db.GetUser)
 	login.Add("sign_token", auth.SignTokenWithTokenExpireTime(10 * time.Minute))
 
@@ -40,9 +40,11 @@ func BuildStreamlines() {
 	recoverPw.Add("get user form db", auth_db.GetUser)
 	recoverPw.Add("set recover", auth.SetRecover)
 	recoverPw.Add("sign_token", auth.SignTokenWithTokenExpireTime(time.Hour * 24))
-	recoverPw.Add("send email", email.SendEmail)
+	recoverPw.Add("send email", email.SendRecoveryEmail)
 
-
+	activeUser := Factory.NewStreamline("/auth/user/activate", "activate", "user")
+	activeUser.Add("val", auth.Validate)
+	activeUser.Add("get user form db", auth_db.ActiveUser)
 	AddBaseRequestFillerToAll()
 }
 

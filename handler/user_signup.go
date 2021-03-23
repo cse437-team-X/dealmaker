@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/dealmaker/shared/auth/model"
 	"github.com/itzmeerkat/streamline"
 	"github.com/dealmaker/factory"
 	"github.com/dealmaker/procedure/auth_db"
@@ -12,6 +13,7 @@ import (
 type UserSignupDomain struct {
 	base.Base
 	auth_db.UserCredModel
+	model.JwtAuth
 }
 
 func UserSignup(c *gin.Context) {

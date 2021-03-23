@@ -76,6 +76,7 @@ func main() {
 	r.POST("/auth/user/signup", handler.UserSignup)
 	r.POST("/auth/user/login", handler.UserLogin)
 	r.GET("/auth/user/recover", handler.UserRecover)
+	r.GET("/auth/user/activate", handler.ActivateUser)
 	r.POST("/item/upload", handler.ItemUpload)
 	r.POST("/item/get", handler.ItemGetHandler)
 

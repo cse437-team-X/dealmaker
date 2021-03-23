@@ -3,3 +3,4 @@ go.sum
 .DS_Store
 dealmaker
 sendgrid.env
+./conf/set_env.sh

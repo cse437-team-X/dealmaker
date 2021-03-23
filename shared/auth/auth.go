@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"github.com/itzmeerkat/streamline"
 	"github.com/dealmaker/procedure/auth_db"
 	"github.com/dealmaker/shared/auth/model"
+	"github.com/itzmeerkat/streamline"
 	"github.com/kataras/jwt"
 	"net/http"
 	"time"
@@ -19,34 +19,32 @@ var sharedKey = []byte("p@ssw0rd")
 func init() {
 	blockList = jwt.NewBlocklist(InvalidTokenExpireTime)
 }
+//
+//type CredUserInterface interface {
+//	GetCredUser() *model.CredUser
+//}
 
-type CredUserInterface interface {
-	GetCredUser() *model.CredUser
-}
 
-type JwtInterface interface {
-	GetJwtAuth() *model.JwtAuth
-}
-
-func ValidateSignUp(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(CredUserInterface).GetCredUser()
-	data.Role = model.UserRoleUser
-	data.Status = model.UserStatusInactive
-
-	c.Debugw("filled CredUser", data)
-	return http.StatusOK
-}
-
-func ValidateCredUser(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(CredUserInterface).GetCredUser()
-	hpw := data.HashedPassword
-	loginName := data.LoginName
-	c.Debugw("loginname", loginName, "hashedpw", hpw)
-	return http.StatusOK
-}
+//
+//func ValidateSignUp(c *streamline.ConveyorBelt) int {
+//	data := c.DataDomain.(CredUserInterface).GetCredUser()
+//	data.Role = model.UserRoleUser
+//	data.Status = model.UserStatusInactive
+//
+//	c.Debugw("filled CredUser", data)
+//	return http.StatusOK
+//}
+//
+//func ValidateCredUser(c *streamline.ConveyorBelt) int {
+//	data := c.DataDomain.(CredUserInterface).GetCredUser()
+//	hpw := data.HashedPassword
+//	loginName := data.LoginName
+//	c.Debugw("loginname", loginName, "hashedpw", hpw)
+//	return http.StatusOK
+//}
 
 func Logout(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(JwtInterface).GetJwtAuth()
+	data := c.DataDomain.(model.JwtInterface).GetJwtAuth()
 	token := data.VToken
 	err := blockList.InvalidateToken(token.Token, token.StandardClaims)
 	if err != nil {
@@ -57,13 +55,23 @@ func Logout(c *streamline.ConveyorBelt) int {
 
 func SignTokenWithTokenExpireTime(t time.Duration) func(c *streamline.ConveyorBelt) int {
 	return func(c *streamline.ConveyorBelt) int {
-		jwtdata := c.DataDomain.(JwtInterface).GetJwtAuth()
+		jwtdata := c.DataDomain.(model.JwtInterface).GetJwtAuth()
 		credUserData := c.DataDomain.(auth_db.AuthDBInterface).GetUserCredModel()
+		jwtdata.TokenClaim.Uid = credUserData.ID
+		jwtdata.TokenClaim.Role = credUserData.Role
 
-		token, err := jwt.Sign(jwt.HS256, sharedKey, model.TokenClaim{
-			Uid:  credUserData.ID,
-			Role: credUserData.Role,
-		}, jwt.MaxAge(t))
+
+		if credUserData.Status != 0 && jwtdata.TokenClaim.Scope == "" {
+			// Regular login Token
+			jwtdata.TokenClaim.Scope = "normal"
+		}
+		if credUserData.Status == 0 {
+			// Not verified user
+			jwtdata.TokenClaim.Scope = "activation"
+		}
+
+
+		token, err := jwt.Sign(jwt.HS256, sharedKey, jwtdata.TokenClaim, jwt.MaxAge(t))
 		if err != nil {
 			panic(err)
 		}
@@ -74,7 +82,7 @@ func SignTokenWithTokenExpireTime(t time.Duration) func(c *streamline.ConveyorBe
 }
 
 func Validate(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(JwtInterface).GetJwtAuth()
+	data := c.DataDomain.(model.JwtInterface).GetJwtAuth()
 	token := data.Token
 
 	vtoken, err := jwt.Verify(jwt.HS256, sharedKey, []byte(token), blockList)

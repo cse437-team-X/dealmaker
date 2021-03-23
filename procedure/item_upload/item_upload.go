@@ -1,10 +1,10 @@
 package item_upload
 
 import (
-	"github.com/itzmeerkat/streamline"
 	"github.com/dealmaker/dal"
 	"github.com/dealmaker/model"
-	"github.com/dealmaker/shared/auth"
+	model2 "github.com/dealmaker/shared/auth/model"
+	"github.com/itzmeerkat/streamline"
 	"net/http"
 )
 
@@ -14,7 +14,7 @@ type GetItemInterface interface {
 
 func InsertItem(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(GetItemInterface).GetItem()
-	jwtData := c.DataDomain.(auth.JwtInterface).GetJwtAuth()
+	jwtData := c.DataDomain.(model2.JwtInterface).GetJwtAuth()
 	c.Debugw(
 		"desc",data.Description,
 		"title", data.Title,
