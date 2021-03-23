@@ -1,8 +1,8 @@
 package auth_db
 
 import (
-	"github.com/itzmeerkat/streamline"
 	"github.com/dealmaker/dal"
+	"github.com/itzmeerkat/streamline"
 	"net/http"
 )
 
@@ -32,6 +32,7 @@ func GetUser(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(AuthDBInterface)
 	dbRes := data.GetUserCredModel()
 	oldpw := dbRes.HashedPassword
+	c.Debugw("getuser", dbRes)
 	res := dal.DB.Take(dbRes, "login_name = ?", dbRes.LoginName)
 	err := res.Error
 	if err != nil {
