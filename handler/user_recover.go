@@ -10,11 +10,12 @@ import (
 func UserRecover (c *gin.Context) {
 	s := factory.Factory.Get("/auth/user/recover")
 	domain := UserLoginDomain{}
-	err := c.Bind(&domain)
-
-	if err != nil {
-		return
-	}
+	loginName := c.Query("username")
+	//err := c.Bind(&domain)
+	domain.LoginName = loginName
+	//if err != nil {
+	//	return
+	//}
 	conv := streamline.NewConveyorBelt(s, c, &domain, GenLogMeta)
 
 	conv.Debugw("domain",domain)
