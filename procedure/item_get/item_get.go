@@ -1,7 +1,7 @@
 package item_get
 
 import (
-	"gitee.com/fat_marmota/streamline"
+	"github.com/itzmeerkat/streamline"
 	"github.com/dealmaker/dal"
 	"github.com/dealmaker/model"
 	"go.mongodb.org/mongo-driver/bson"

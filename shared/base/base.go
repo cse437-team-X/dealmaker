@@ -2,7 +2,7 @@ package base
 
 import (
 	"fmt"
-	"gitee.com/fat_marmota/streamline"
+	"github.com/itzmeerkat/streamline"
 	"math/rand"
 	"net/http"
 	"strconv"

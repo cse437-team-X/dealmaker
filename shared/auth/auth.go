@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"gitee.com/fat_marmota/streamline"
+	"github.com/itzmeerkat/streamline"
 	"github.com/dealmaker/procedure/auth_db"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/kataras/jwt"

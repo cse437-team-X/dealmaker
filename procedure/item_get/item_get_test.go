@@ -1,13 +1,12 @@
 package item_get
 
 import (
-	"gitee.com/fat_marmota/infra/log"
-	"gitee.com/fat_marmota/streamline"
+	"github.com/itzmeerkat/mentally-friendly-infra/log"
+	"github.com/itzmeerkat/streamline"
 	"github.com/dealmaker/dal"
 	"github.com/dealmaker/procedure/auth_db"
 	"github.com/dealmaker/procedure/item_upload"
 	"testing"
-	"time"
 )
 
 func TestQueryItem(t *testing.T) {
@@ -22,8 +21,6 @@ func TestQueryItem(t *testing.T) {
 		ItemFilter:ItemFilter{
 			Uploader:  0,
 			Tags:      []string{"B"},
-			BeginTime: time.Unix(0,0),
-			EndTime:   time.Unix(0,0),
 		},
 	}
 

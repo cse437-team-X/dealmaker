@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"gitee.com/fat_marmota/streamline"
+	"github.com/itzmeerkat/streamline"
 	"github.com/dealmaker/factory"
 	"github.com/dealmaker/procedure/auth_db"
 	"github.com/dealmaker/resp_def"

@@ -1,10 +1,10 @@
 package tests
 
 import (
-	"gitee.com/fat_marmota/infra/log"
-	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/factory"
 	"github.com/dealmaker/handler"
+	"github.com/itzmeerkat/mentally-friendly-infra/log"
+	"github.com/itzmeerkat/streamline"
 	"github.com/stretchr/testify/require"
 	"testing"
 )

@@ -1,7 +1,7 @@
 package dal
 
 import (
-	"gitee.com/fat_marmota/infra/db_client"
+	"github.com/itzmeerkat/mentally-friendly-infra/db_client"
 	"gorm.io/gorm"
 )
 

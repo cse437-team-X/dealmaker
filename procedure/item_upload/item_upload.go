@@ -1,7 +1,7 @@
 package item_upload
 
 import (
-	"gitee.com/fat_marmota/streamline"
+	"github.com/itzmeerkat/streamline"
 	"github.com/dealmaker/dal"
 	"github.com/dealmaker/model"
 	"github.com/dealmaker/shared/auth"

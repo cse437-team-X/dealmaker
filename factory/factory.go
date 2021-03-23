@@ -1,12 +1,12 @@
 package factory
 
 import (
-	"gitee.com/fat_marmota/streamline"
 	"github.com/dealmaker/procedure/auth_db"
 	"github.com/dealmaker/procedure/item_get"
 	"github.com/dealmaker/procedure/item_upload"
 	"github.com/dealmaker/shared/auth"
 	"github.com/dealmaker/shared/base"
+	"github.com/itzmeerkat/streamline"
 	"time"
 )
 

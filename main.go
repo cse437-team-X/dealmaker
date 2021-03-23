@@ -1,12 +1,12 @@
 package main
 
 import (
-	"gitee.com/fat_marmota/infra/log"
 	"github.com/dealmaker/dal"
 	"github.com/dealmaker/factory"
 	"github.com/dealmaker/handler"
 	"github.com/dealmaker/procedure/auth_db"
 	"github.com/gin-gonic/gin"
+	"github.com/itzmeerkat/mentally-friendly-infra/log"
 )
 
 func main() {
@@ -28,7 +28,7 @@ func main() {
 
 	r.POST("/auth/user/signup", handler.UserSignup)
 	r.POST("/auth/user/login", handler.UserLogin)
-	r.POST("/auth/user/recover", handler.UserRecover)
+	r.GET("/auth/user/recover", handler.UserRecover)
 	r.POST("/item/upload", handler.ItemUpload)
 	r.POST("/item/get", handler.ItemGetHandler)
 

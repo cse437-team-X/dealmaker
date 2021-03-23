@@ -1,7 +1,7 @@
 package auth_db
 
 import (
-	"gitee.com/fat_marmota/streamline"
+	"github.com/itzmeerkat/streamline"
 	"github.com/dealmaker/dal"
 	"net/http"
 )
