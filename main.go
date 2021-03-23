@@ -5,6 +5,7 @@ import (
 	"github.com/dealmaker/factory"
 	"github.com/dealmaker/handler"
 	"github.com/dealmaker/procedure/auth_db"
+	"github.com/dealmaker/procedure/email"
 	"github.com/gin-gonic/gin"
 	"github.com/itzmeerkat/mentally-friendly-infra/log"
 )
@@ -12,8 +13,9 @@ import (
 func main() {
 	// Init begin
 	log.InitZapSugared(true, false, 1)
-	dal.InitDatabaseClient("root:12345678@tcp(127.0.0.1:3306)/dealmaker?parseTime=true", nil, "mysql")
+	dal.InitDatabaseClient("root:6be6a9019e03ff2f@tcp(127.0.0.1:3306)/dealmaker?parseTime=true", nil, "mysql")
 	dal.InitMongoDB()
+	email.InitEmailClient()
 	auth_db.InitUserCredModel()
 	//item_upload.InitItemModel()
 	//item_upload.InitTagsModel()
