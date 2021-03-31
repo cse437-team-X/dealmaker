@@ -53,7 +53,7 @@ func SendActivationEmail(c *streamline.ConveyorBelt) int {
 
 	toEmail := data.LoginName+"@wustl.edu"
 	to := mail.NewEmail(data.LoginName, toEmail)
-	activationLink := "http://437.cpp.moe/auth/user/activate?token="+token.Token
+	activationLink := "http://437.cpp.moe:8080/auth/user/activate?token="+token.Token
 
 	plainTextContent := "Hi, "+data.LoginName+"\nclick link to activate your account:" + activationLink
 	htmlContent := "Hi, "+data.LoginName+"\nclick link to activate your account:" + activationLink
