@@ -2,6 +2,7 @@ package base
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/itzmeerkat/streamline"
 	"math/rand"
 	"net/http"
@@ -31,5 +32,6 @@ func BaseRequestFiller(c *streamline.ConveyorBelt) int {
 	reqTime := time.Now()
 	data.BaseTime = reqTime.Unix()
 	data.BaseLogId = genLogId(c, reqTime)
+	c.Ctx.(*gin.Context).Header("log-id", data.BaseLogId)
 	return http.StatusOK
 }
