@@ -43,7 +43,8 @@ func GetUser(c *streamline.ConveyorBelt) int {
 		return http.StatusInternalServerError
 	}
 
-	if oldpw != "" && oldpw != dbRes.HashedPassword {
+	if oldpw != "" && oldpw != dbRes.HashedPassword ||
+		dbRes.Status == 0 {
 		return http.StatusForbidden
 	}
 	return http.StatusOK
