@@ -2,7 +2,6 @@ package email
 
 import (
 	"fmt"
-	"github.com/dealmaker/procedure/auth_db"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/itzmeerkat/streamline"
 	"github.com/sendgrid/sendgrid-go"
@@ -19,8 +18,12 @@ func InitEmailClient() {
 	client = sendgrid.NewSendClient(key)
 }
 
+type EmailInterface interface {
+	GetCredUser() *model.CredUser
+}
+
 func SendRecoveryEmail(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(auth_db.AuthDBInterface).GetUserCredModel()
+	data := c.DataDomain.(EmailInterface).GetCredUser()
 	token := c.DataDomain.(model.JwtInterface).GetJwtAuth()
 	from := mail.NewEmail("Dealmaker Admin", "jiayi.zhang@wustl.edu")
 	subject := "YOUR PASSWORD RECOVERY LINK"
@@ -46,7 +49,7 @@ func SendRecoveryEmail(c *streamline.ConveyorBelt) int {
 }
 
 func SendActivationEmail(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(auth_db.AuthDBInterface).GetUserCredModel()
+	data := c.DataDomain.(EmailInterface).GetCredUser()
 	token := c.DataDomain.(model.JwtInterface).GetJwtAuth()
 	from := mail.NewEmail("Dealmaker Admin", "jiayi.zhang@wustl.edu")
 	subject := "Activate your account!"

@@ -1,18 +1,17 @@
 package handler
 
 import (
-	"github.com/itzmeerkat/streamline"
 	"github.com/dealmaker/factory"
-	"github.com/dealmaker/procedure/auth_db"
 	"github.com/dealmaker/resp_def"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
+	"github.com/itzmeerkat/streamline"
 )
 
 type UserLoginDomain struct {
 	base.Base
-	auth_db.UserCredModel
+	model.CredUser
 	model.JwtAuth
 }
 

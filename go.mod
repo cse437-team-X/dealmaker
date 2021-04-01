@@ -11,8 +11,8 @@ require (
 	github.com/golang/snappy v0.0.3 // indirect
 	github.com/itzmeerkat/mentally-friendly-infra/config v0.0.0-20210323070610-831cbd44dfe0
 	github.com/itzmeerkat/mentally-friendly-infra/db_client v0.0.0-20210323013425-5372a952b612
-	github.com/itzmeerkat/mentally-friendly-infra/log v0.0.0-20210323013425-5372a952b612
-	github.com/itzmeerkat/streamline v0.0.3
+	github.com/itzmeerkat/mentally-friendly-infra/log v0.0.0-20210323070610-831cbd44dfe0
+	github.com/itzmeerkat/streamline v0.0.4-0.20210401131640-50dc5d827c42
 	github.com/jinzhu/now v1.1.2 // indirect
 	github.com/kataras/jwt v0.1.2
 	github.com/klauspost/compress v1.11.12 // indirect

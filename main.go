@@ -5,7 +5,6 @@ import (
 	"github.com/dealmaker/dal"
 	"github.com/dealmaker/factory"
 	"github.com/dealmaker/handler"
-	"github.com/dealmaker/procedure/auth_db"
 	"github.com/dealmaker/procedure/email"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -59,7 +58,8 @@ func main() {
 	dal.InitDatabaseClient(conf.MySqlConfig.GetMasterDSN(), nil, "mysql")
 	dal.InitMongoDB()
 	email.InitEmailClient()
-	auth_db.InitUserCredModel()
+	//auth_db.InitUserCredModel()
+	dal.InitCredUser()
 	email.InitEmailClient()
 	//item_upload.InitItemModel()
 	//item_upload.InitTagsModel()

@@ -1,18 +1,17 @@
 package item_get
 
 import (
+	"github.com/dealmaker/dal"
+	"github.com/dealmaker/procedure/item_upload"
 	"github.com/itzmeerkat/mentally-friendly-infra/log"
 	"github.com/itzmeerkat/streamline"
-	"github.com/dealmaker/dal"
-	"github.com/dealmaker/procedure/auth_db"
-	"github.com/dealmaker/procedure/item_upload"
 	"testing"
 )
 
 func TestQueryItem(t *testing.T) {
 	log.InitZapSugared(true, false, 1)
 	dal.InitDatabaseClient("root:12345678@tcp(127.0.0.1:3306)/dealmaker?parseTime=true", nil, "mysql")
-	auth_db.InitUserCredModel()
+	//auth_db.InitUserCredModel()
 	item_upload.InitItemModel()
 	item_upload.InitTagsModel()
 
