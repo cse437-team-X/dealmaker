@@ -3,8 +3,7 @@ package factory
 import (
 	"github.com/dealmaker/dal"
 	"github.com/dealmaker/procedure/email"
-	"github.com/dealmaker/procedure/item_get"
-	"github.com/dealmaker/procedure/item_upload"
+	"github.com/dealmaker/procedure/item"
 	"github.com/dealmaker/shared/auth"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
@@ -14,7 +13,7 @@ import (
 
 var Factory *streamline.Factory
 var authInstance auth.WorkerInstance
-
+var itemInstance item.WorkerInstance
 func init() {
 	Factory = streamline.New()
 	authInstance = auth.WorkerInstance{
@@ -24,15 +23,21 @@ func init() {
 		InvalidTokenForgetTime: time.Minute * 65,
 		TokenExpireTimes:        make(map[string]time.Duration),
 	}.Init()
+
+	itemInstance = item.WorkerInstance{
+		FuncGetItem:    dal.GetItem,
+		FuncUpdateItem: nil,
+		FuncInsertItem: dal.InsertItem,
+	}
 }
 
 func BuildStreamlines() {
 	itemGet := Factory.NewStreamline("/item/get", "get", "item")
-	itemGet.Add("query items", item_get.QueryItem)
+	itemGet.Add("query items", itemInstance.GetItem)
 
 	itemUpload := Factory.NewStreamline("/item/upload", "upload", "item")
 	itemUpload.Add("val", authInstance.ValidateJwt)
-	itemUpload.Add("rua", item_upload.InsertItem)
+	itemUpload.Add("rua", itemInstance.InsertItem)
 
 	signup := Factory.NewStreamline("/auth/user/signup", "signup", "user")
 	signup.Add("insert to db", authInstance.NewUser)

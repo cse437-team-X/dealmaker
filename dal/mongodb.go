@@ -9,7 +9,6 @@ import (
 
 var Mongo *mongo.Client
 
-//var CredUserCollection *mongo.Collection
 var ItemCollection *mongo.Collection
 
 func InitMongoDB() {

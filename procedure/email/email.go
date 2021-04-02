@@ -12,7 +12,7 @@ import (
 
 var client *sendgrid.Client
 
-func InitEmailClient() {
+func init() {
 	key := os.Getenv("SENDGRID_API_KEY")
 	fmt.Println(key)
 	client = sendgrid.NewSendClient(key)

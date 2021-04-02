@@ -44,9 +44,3 @@ func (w *WorkerInstance) Logout(c *streamline.ConveyorBelt) int {
 	}
 	return http.StatusOK
 }
-//
-//func (w *WorkerInstance) SetRecover(c *streamline.ConveyorBelt) int {
-//	data := c.DataDomain.(auth_db.AuthDBInterface).GetUserCredModel()
-//	data.Role = "recover"
-//	return http.StatusOK
-//}
