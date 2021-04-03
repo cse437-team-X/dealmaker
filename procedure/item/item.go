@@ -10,3 +10,6 @@ type WorkerInstance struct {
 	FuncUpdateItem func(ctx context.Context, item *model.Item) error
 	FuncInsertItem func(ctx context.Context, item *model.Item) error
 }
+func (w WorkerInstance) Init() *WorkerInstance {
+	return &w
+}

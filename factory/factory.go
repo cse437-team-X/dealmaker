@@ -12,8 +12,9 @@ import (
 )
 
 var Factory *streamline.Factory
-var authInstance auth.WorkerInstance
-var itemInstance item.WorkerInstance
+var authInstance *auth.WorkerInstance
+var itemInstance *item.WorkerInstance
+var emailInstance *email.WorkerInstance
 func init() {
 	Factory = streamline.New()
 	authInstance = auth.WorkerInstance{
@@ -28,7 +29,8 @@ func init() {
 		FuncGetItem:    dal.GetItem,
 		FuncUpdateItem: nil,
 		FuncInsertItem: dal.InsertItem,
-	}
+	}.Init()
+	emailInstance = email.WorkerInstance{}.Init()
 }
 
 func BuildStreamlines() {
@@ -42,7 +44,8 @@ func BuildStreamlines() {
 	signup := Factory.NewStreamline("/auth/user/signup", "signup", "user")
 	signup.Add("insert to db", authInstance.NewUser)
 	signup.Add("sign_token", authInstance.SignTokenToScope(model.JwtScopeActivate))
-	signup.Add("send activation email", email.SendActivationEmail)
+	signup.Add("send email", emailInstance.BuildActivationEmail)
+	signup.Add("send email", emailInstance.SendEmail)
 
 
 	login := Factory.NewStreamline("/auth/user/login", "login", "user")
@@ -51,7 +54,8 @@ func BuildStreamlines() {
 
 	recoverPw := Factory.NewStreamline("/auth/user/recover", "recover", "user")
 	recoverPw.Add("sign_token", authInstance.SignTokenToScope(model.JwtScopeRecover))
-	recoverPw.Add("send email", email.SendRecoveryEmail)
+	recoverPw.Add("send email", emailInstance.BuildRecoverEmail)
+	recoverPw.Add("send email", emailInstance.SendEmail)
 
 	activeUser := Factory.NewStreamline("/auth/user/activate", "activate", "user")
 	activeUser.Add("val", authInstance.ValidateJwt)

@@ -20,7 +20,7 @@ type WorkerInstance struct {
 	blockList *jwt.Blocklist
 }
 
-func (w WorkerInstance) Init() WorkerInstance {
+func (w WorkerInstance) Init() *WorkerInstance {
 	w.blockList = jwt.NewBlocklist(w.InvalidTokenForgetTime)
 	w.sharedKey = []byte("p@ssw0rd")
 	if _,ok := w.TokenExpireTimes[model.JwtScopeNormal]; !ok {
@@ -32,7 +32,7 @@ func (w WorkerInstance) Init() WorkerInstance {
 	if _,ok := w.TokenExpireTimes[model.JwtScopeRecover]; !ok {
 		w.TokenExpireTimes[model.JwtScopeRecover] = time.Hour * 24
 	}
-	return w
+	return &w
 }
 
 func (w *WorkerInstance) Logout(c *streamline.ConveyorBelt) int {
