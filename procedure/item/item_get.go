@@ -6,29 +6,12 @@ import (
 	"net/http"
 )
 
-// None nil conditions will be connected with ANDs
-type QueryFilter struct {
-	Uploader uint
-	Tags []string
-	//BeginTime time.Time
-	//EndTime time.Time
-	//FuzzyTitle string
-}
-
-type GetItemDomain struct {
-	QueryFilter
-	Result []model.Item
-}
-func (i *GetItemDomain) GetGetItemDomain() *GetItemDomain {
-	return i
-}
-
 type GetItemInterface interface {
-	GetGetItemDomain() *GetItemDomain
+	GetItemDomain() *model.GetItemDomain
 }
 
 func (w *WorkerInstance) GetItem(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(GetItemInterface).GetGetItemDomain()
+	data := c.DataDomain.(GetItemInterface).GetItemDomain()
 	filter := data.QueryFilter
 	dbRes,err := w.FuncGetItem(c.Ctx, filter)
 	if err != nil {

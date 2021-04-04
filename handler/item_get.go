@@ -3,7 +3,7 @@ package handler
 import (
 	"github.com/itzmeerkat/streamline"
 	"github.com/dealmaker/factory"
-	"github.com/dealmaker/procedure/item"
+	model2 "github.com/dealmaker/procedure/item/model"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
@@ -12,7 +12,7 @@ import (
 type ItemGetDomain struct {
 	base.Base
 	model.JwtAuth
-	item.GetItemDomain
+	model2.GetItemDomain
 }
 
 func ItemGetHandler(c *gin.Context) {

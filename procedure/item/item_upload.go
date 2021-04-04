@@ -9,11 +9,12 @@ import (
 
 type InsertItemInterface interface {
 	GetItem() *model.Item
+	GetJwtAuth() *model2.JwtAuth
 }
 
 func (w *WorkerInstance) InsertItem(c *streamline.ConveyorBelt) int {
 	data := c.DataDomain.(InsertItemInterface).GetItem()
-	jwtData := c.DataDomain.(model2.JwtInterface).GetJwtAuth()
+	jwtData := c.DataDomain.(InsertItemInterface).GetJwtAuth()
 	c.Debugw(
 		"desc",data.Description,
 		"title", data.Title,

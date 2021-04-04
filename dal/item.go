@@ -2,12 +2,11 @@ package dal
 
 import (
 	"context"
-	"github.com/dealmaker/procedure/item"
 	"github.com/dealmaker/procedure/item/model"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func GetItem(ctx context.Context, filter item.QueryFilter) ([]model.Item, error) {
+func GetItem(ctx context.Context, filter model.QueryFilter) ([]model.Item, error) {
 	mongoFilter := bson.M{}
 	if filter.Uploader != 0 {
 		mongoFilter["uploader"] = filter.Uploader
