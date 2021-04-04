@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/dealmaker/factory"
+	model2 "github.com/dealmaker/procedure/email/model"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
@@ -11,6 +12,7 @@ import (
 type UserActivateDomain struct {
 	base.Base
 	model.JwtAuth
+	model2.EmailContent
 }
 
 

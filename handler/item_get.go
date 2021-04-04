@@ -12,7 +12,7 @@ import (
 type ItemGetDomain struct {
 	base.Base
 	model.JwtAuth
-	item.ItemGet
+	item.GetItemDomain
 }
 
 func ItemGetHandler(c *gin.Context) {

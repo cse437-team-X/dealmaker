@@ -2,8 +2,8 @@ package handler
 
 import (
 	"fmt"
-	"github.com/itzmeerkat/streamline"
 	"github.com/dealmaker/shared/base"
+	"github.com/itzmeerkat/streamline"
 )
 
 func GenLogMeta(c *streamline.ConveyorBelt) string {

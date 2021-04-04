@@ -6,6 +6,6 @@ type EmailContent struct {
 	Title     string
 	Body      string
 }
-func (e *EmailContent) GetEmailBody() *EmailContent {
+func (e *EmailContent) GetEmailContent() *EmailContent {
 	return e
 }
