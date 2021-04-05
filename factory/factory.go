@@ -4,6 +4,7 @@ import (
 	"github.com/dealmaker/dal"
 	"github.com/dealmaker/procedure/email"
 	"github.com/dealmaker/procedure/item"
+	"github.com/dealmaker/shared/access_control"
 	"github.com/dealmaker/shared/auth"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
@@ -15,6 +16,7 @@ var Factory *streamline.Factory
 var authInstance *auth.WorkerInstance
 var itemInstance *item.WorkerInstance
 var emailInstance *email.WorkerInstance
+var acInstance *access_control.WorkerInstance
 func init() {
 	Factory = streamline.New()
 	authInstance = auth.WorkerInstance{
@@ -31,6 +33,11 @@ func init() {
 		FuncInsertItem: dal.InsertItem,
 	}.Init()
 	emailInstance = email.WorkerInstance{}.Init()
+
+	acInstance = access_control.WorkerInstance{
+		ConfPath:   "./conf/rbac/model.conf",
+		PolicyPath: "./conf/rbac/policy.csv",
+	}.Init()
 }
 
 func BuildStreamlines() {
@@ -39,6 +46,7 @@ func BuildStreamlines() {
 
 	itemUpload := Factory.NewStreamline("/item/upload", "upload", "item")
 	itemUpload.Add("val", authInstance.ValidateJwt)
+	itemUpload.Add("rbac", acInstance.CheckAccess)
 	itemUpload.Add("rua", itemInstance.InsertItem)
 
 	signup := Factory.NewStreamline("/auth/user/signup", "signup", "user")

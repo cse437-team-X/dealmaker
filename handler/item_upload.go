@@ -26,8 +26,8 @@ func ItemUpload(c *gin.Context) {
 	conv := streamline.NewConveyorBelt(s, c, &domain, GenLogMeta)
 	code, err := conv.Run()
 	if err != nil {
-		c.AbortWithStatus(code)
+		c.AbortWithStatusJSON(code, domain.Base)
 		return
 	}
-	c.JSON(code, nil)
+	c.JSON(code, domain.Base)
 }

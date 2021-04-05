@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/aws/aws-sdk-go v1.38.2 // indirect
+	github.com/casbin/casbin/v2 v2.25.4
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
@@ -21,7 +22,6 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/sendgrid/rest v2.6.3+incompatible // indirect
 	github.com/sendgrid/sendgrid-go v3.8.0+incompatible
-	github.com/stretchr/testify v1.6.1
 	github.com/ugorji/go v1.2.4 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
 	go.mongodb.org/mongo-driver v1.5.0
@@ -33,9 +33,3 @@ require (
 	gorm.io/driver/mysql v1.0.5 // indirect
 	gorm.io/gorm v1.21.4
 )
-
-//replace (
-//	gitee.com/fat_marmota/infra/db_client v0.0.0 => ../../gitee.com/fat_marmota/infra/db_client
-//	github.com/itzmeerkat/mentally-friendly-infra/log v0.0.0 => ../../github.com/itzmeerkat/mentally-friendly-infra/log
-//	github.com/itzmeerkat/streamline v0.0.0 => ../../gitee.com/streamline
-//)

@@ -1,0 +1,8 @@
+p, normal_user, item, upload
+p, normal_user, user, logout
+p, activate_user, user, activate
+p, recover_user, user, recover
+
+g, normal_admin, normal_user
+g, normal_admin, activate_user
+g, normal_admin, recover_user
