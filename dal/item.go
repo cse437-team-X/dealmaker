@@ -2,6 +2,7 @@ package dal
 
 import (
 	"context"
+	"fmt"
 	"github.com/dealmaker/procedure/item/model"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -14,7 +15,22 @@ func GetItem(ctx context.Context, filter model.QueryFilter) ([]model.Item, error
 	if filter.Tags != nil {
 		mongoFilter["tags"] = bson.M{"$in":filter.Tags}
 	}
-
+	if filter.FuzzyTitle != "" {
+		mongoFilter["title"] = bson.M{"$regex":filter.FuzzyTitle, "$options":"i"}
+	}
+	// TODO: time interval
+    timeRange := bson.M{}
+    if filter.BeginTime != 0 {
+    	timeRange["$gte"] = filter.BeginTime
+	}
+	if filter.EndTime != 0 {
+		timeRange["$lt"] = filter.EndTime
+	}
+	if len(timeRange) > 0 {
+		mongoFilter["updatetime"] = timeRange
+	}
+	fmt.Println(mongoFilter)
+	fmt.Println(filter)
 	cursor, err := ItemCollection.Find(ctx, mongoFilter)
 	if err != nil {
 		return nil, err

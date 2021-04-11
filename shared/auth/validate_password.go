@@ -2,20 +2,34 @@ package auth
 
 import (
 	"github.com/dealmaker/shared/auth/model"
+	"github.com/dealmaker/shared/base"
 	"github.com/itzmeerkat/streamline"
 	"net/http"
 )
 
 type ValidatePasswordInterface interface {
 	GetCredUser() *model.CredUser
+	GetBase() *base.Base
 }
 
 func (w *WorkerInstance) ValidatePassword(c *streamline.ConveyorBelt) int {
 	inputCredUser := c.DataDomain.(ValidatePasswordInterface).GetCredUser()
+	rbase := c.DataDomain.(ValidatePasswordInterface).GetBase()
+
 	dbCredUser := w.FuncGetCredUser(inputCredUser)
-	if dbCredUser.Status != 1 ||
-		dbCredUser.HashedPassword != inputCredUser.HashedPassword{
+	c.Debugw("cred_user form db", dbCredUser)
+
+	if dbCredUser.HashedPassword != inputCredUser.HashedPassword {
+		rbase.BaseMessage = "password and login name doesn't match"
 		return http.StatusForbidden
 	}
+
+	if dbCredUser.Status != 1 {
+		rbase.BaseMessage = "inactive user"
+		return http.StatusForbidden
+	}
+
+	inputCredUser.Role = dbCredUser.Role
+
 	return http.StatusOK
 }

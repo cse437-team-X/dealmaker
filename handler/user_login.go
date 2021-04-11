@@ -30,7 +30,7 @@ func UserLogin (c *gin.Context) {
 	conv.Debugw("domain",domain)
 	code, err := conv.Run()
 	if err != nil {
-		c.AbortWithStatus(code)
+		c.AbortWithStatusJSON(code,domain)
 		return
 	}
 	c.JSON(code, resp_def.UserLoginResponse{

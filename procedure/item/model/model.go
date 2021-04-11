@@ -6,6 +6,7 @@ type Item struct {
 	ImageUrls []string
 	Tags []string
 	Uploader uint
+	UpdateTime int64
 }
 
 func (i *Item) GetItem() *Item {
@@ -16,15 +17,15 @@ func (i *Item) GetItem() *Item {
 type QueryFilter struct {
 	Uploader uint
 	Tags []string
-	//BeginTime time.Time
-	//EndTime time.Time
-	//FuzzyTitle string
+	BeginTime int64
+	EndTime int64
+	FuzzyTitle string
 }
 
 type GetItemDomain struct {
 	QueryFilter
 	Result []Item
 }
-func (i *GetItemDomain) GetItemDomain() *GetItemDomain {
+func (i *GetItemDomain) GetGetItemDomain() *GetItemDomain {
 	return i
 }

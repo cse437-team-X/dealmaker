@@ -5,6 +5,7 @@ import (
 	model2 "github.com/dealmaker/shared/auth/model"
 	"github.com/itzmeerkat/streamline"
 	"net/http"
+	"time"
 )
 
 type InsertItemInterface interface {
@@ -22,6 +23,7 @@ func (w *WorkerInstance) InsertItem(c *streamline.ConveyorBelt) int {
 		"tags", data.Tags)
 
 	data.Uploader = jwtData.Uid
+	data.UpdateTime = time.Now().UnixNano() / 1000
 
 	err := w.FuncInsertItem(c.Ctx, data)
 	if err != nil {

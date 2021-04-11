@@ -1,12 +1,12 @@
 package handler
 
 import (
-	"github.com/itzmeerkat/streamline"
 	"github.com/dealmaker/factory"
 	model2 "github.com/dealmaker/procedure/item/model"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
+	"github.com/itzmeerkat/streamline"
 )
 
 type ItemGetDomain struct {

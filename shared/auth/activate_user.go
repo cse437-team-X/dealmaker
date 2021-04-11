@@ -24,5 +24,10 @@ func (w *WorkerInstance) ActivateUser(c *streamline.ConveyorBelt) int {
 		c.Errorw("Dal update err", err)
 		return http.StatusInternalServerError
 	}
+	err = w.blockList.InvalidateToken(input.VToken.Token, input.VToken.StandardClaims)
+	if err != nil {
+		c.Errorw("invalidate token err", err)
+		return http.StatusInternalServerError
+	}
 	return http.StatusOK
 }

@@ -7,11 +7,11 @@ import (
 )
 
 type GetItemInterface interface {
-	GetItemDomain() *model.GetItemDomain
+	GetGetItemDomain() *model.GetItemDomain
 }
 
 func (w *WorkerInstance) GetItem(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(GetItemInterface).GetItemDomain()
+	data := c.DataDomain.(GetItemInterface).GetGetItemDomain()
 	filter := data.QueryFilter
 	dbRes,err := w.FuncGetItem(c.Ctx, filter)
 	if err != nil {
