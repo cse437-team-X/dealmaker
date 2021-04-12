@@ -17,6 +17,7 @@ var authInstance *auth.WorkerInstance
 var itemInstance *item.WorkerInstance
 var emailInstance *email.WorkerInstance
 var acInstance *access_control.WorkerInstance
+
 func init() {
 	Factory = streamline.New()
 	authInstance = auth.WorkerInstance{
@@ -41,33 +42,38 @@ func init() {
 }
 
 func BuildStreamlines() {
-	itemGet := Factory.NewStreamline("/item/get", "get", "item")
-	itemGet.Add("query items", itemInstance.GetItem)
+	Factory.NewStreamline("/item/get", "get", "item").
+		Add("query items", itemInstance.GetItem)
 
-	itemUpload := Factory.NewStreamline("/item/upload", "upload", "item")
-	itemUpload.Add("val", authInstance.ValidateJwt)
-	itemUpload.Add("rbac", acInstance.CheckAccess)
-	itemUpload.Add("rua", itemInstance.InsertItem)
+	Factory.NewStreamline("/item/upload", "upload", "item").
+		Add("val", authInstance.ValidateJwt).
+		Add("rbac", acInstance.CheckAccess).
+		Add("rua", itemInstance.InsertItem)
 
-	signup := Factory.NewStreamline("/auth/user/signup", "signup", "user")
-	signup.Add("insert to db", authInstance.NewUser)
-	signup.Add("sign_token", authInstance.SignTokenToScope(model.JwtScopeActivate))
-	signup.Add("send email", emailInstance.BuildActivationEmail)
-	signup.Add("send email", emailInstance.SendEmail)
+	Factory.NewStreamline("/auth/user/signup", "signup", "user").
+		Add("insert to db", authInstance.NewUser).
+		Add("sign_token", authInstance.SignTokenToScope(model.JwtScopeActivate)).
+		Add("send email", emailInstance.BuildActivationEmail).
+		Add("send email", emailInstance.SendEmail)
 
 
-	login := Factory.NewStreamline("/auth/user/login", "login", "user")
-	login.Add("get user form db", authInstance.ValidatePassword)
-	login.Add("sign_token", authInstance.SignTokenToScope(model.JwtScopeNormal))
+	Factory.NewStreamline("/auth/user/login", "login", "user").
+		Add("get user form db", authInstance.ValidatePassword).
+		Add("sign_token", authInstance.SignTokenToScope(model.JwtScopeNormal))
 
-	recoverPw := Factory.NewStreamline("/auth/user/recover", "recover", "user")
-	recoverPw.Add("sign_token", authInstance.SignTokenToScope(model.JwtScopeRecover))
-	recoverPw.Add("send email", emailInstance.BuildRecoverEmail)
-	recoverPw.Add("send email", emailInstance.SendEmail)
+	Factory.NewStreamline("/auth/user/recover", "recover", "user").
+		Add("sign_token", authInstance.SignTokenToScope(model.JwtScopeRecover)).
+		Add("send email", emailInstance.BuildRecoverEmail).
+		Add("send email", emailInstance.SendEmail)
 
-	activeUser := Factory.NewStreamline("/auth/user/activate", "activate", "user")
-	activeUser.Add("val", authInstance.ValidateJwt)
-	activeUser.Add("get user form db", authInstance.ActivateUser)
+	Factory.NewStreamline("/auth/user/activate", "activate", "user").
+		Add("val", authInstance.ValidateJwt).
+		Add("get user form db", authInstance.ActivateUser)
+
+	Factory.NewStreamline("/auth/user/update", "update", "user").
+		Add("validate jwt", authInstance.ValidateJwt).
+		Add("update user", authInstance.UpdateUser)
+
 	AddBaseRequestFillerToAll()
 }
 
