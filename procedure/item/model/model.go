@@ -1,6 +1,8 @@
 package model
 
 type Item struct {
+	ObjId string
+
 	Description string
 	Title string
 	ImageUrls []string

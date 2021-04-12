@@ -8,7 +8,7 @@ import (
 type WorkerInstance struct {
 	FuncGetItem func(ctx context.Context, filter model.QueryFilter) ([]model.Item, error)
 	FuncUpdateItem func(ctx context.Context, item *model.Item) error
-	FuncInsertItem func(ctx context.Context, item *model.Item) error
+	FuncInsertItem func(ctx context.Context, item *model.Item) (string, error)
 }
 func (w WorkerInstance) Init() *WorkerInstance {
 	return &w

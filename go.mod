@@ -13,7 +13,7 @@ require (
 	github.com/itzmeerkat/mentally-friendly-infra/config v0.0.0-20210323070610-831cbd44dfe0
 	github.com/itzmeerkat/mentally-friendly-infra/db_client v0.0.0-20210323013425-5372a952b612
 	github.com/itzmeerkat/mentally-friendly-infra/log v0.0.0-20210405084613-711eb2c9fb53
-	github.com/itzmeerkat/streamline v0.0.4-0.20210412071832-1cbfd5304bfb
+	github.com/itzmeerkat/streamline v0.0.4-0.20210412122730-be169695bda1
 	github.com/jinzhu/now v1.1.2 // indirect
 	github.com/kataras/jwt v0.1.2
 	github.com/klauspost/compress v1.11.12 // indirect

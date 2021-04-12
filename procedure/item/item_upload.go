@@ -25,10 +25,11 @@ func (w *WorkerInstance) InsertItem(c *streamline.ConveyorBelt) int {
 	data.Uploader = jwtData.Uid
 	data.UpdateTime = time.Now().UnixNano() / 1000
 
-	err := w.FuncInsertItem(c.Ctx, data)
+	objid, err := w.FuncInsertItem(c.Ctx, data)
 	if err != nil {
 		c.Errorw("Insert item", err)
 		return http.StatusForbidden
 	}
+	data.ObjId = objid
 	return http.StatusOK
 }

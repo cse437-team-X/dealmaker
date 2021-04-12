@@ -1,12 +1,9 @@
 package handler
 
 import (
-	"github.com/dealmaker/factory"
-	"github.com/dealmaker/resp_def"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
-	"github.com/itzmeerkat/streamline"
 )
 
 type UserLoginDomain struct {
@@ -15,25 +12,31 @@ type UserLoginDomain struct {
 	model.JwtAuth
 }
 
+type UserLoginInput struct {
+	LoginName string
+	HashedPassword string
+}
+
+type UserLoginResponse struct {
+	Message string
+	Token string
+}
+
 func UserLogin (c *gin.Context) {
-	s := factory.Factory.Get("/auth/user/login")
-	//loginName := c.Query("username")
-
-	domain := UserLoginDomain{}
-	err := c.Bind(&domain)
-	//domain.LoginName = loginName
+	input := UserLoginInput{}
+	err := c.Bind(&input)
 	if err != nil {
 		return
 	}
-	conv := streamline.NewConveyorBelt(s, c, &domain, GenLogMeta)
-
-	conv.Debugw("domain",domain)
-	code, err := conv.Run()
-	if err != nil {
-		c.AbortWithStatusJSON(code,domain)
-		return
+	domain := UserLoginDomain{
+		CredUser: model.CredUser{
+			LoginName: input.LoginName,
+			HashedPassword: input.HashedPassword,
+		},
 	}
-	c.JSON(code, resp_def.UserLoginResponse{
+	code := ExecuteStreamline(c, "/auth/user/login", domain)
+	c.JSON(code, UserLoginResponse{
 		Token: domain.Token,
+		Message: domain.BaseMessage,
 	})
 }

@@ -1,12 +1,10 @@
 package handler
 
 import (
-	"github.com/dealmaker/factory"
 	model2 "github.com/dealmaker/procedure/item/model"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
-	"github.com/itzmeerkat/streamline"
 )
 
 type ItemGetDomain struct {
@@ -15,23 +13,38 @@ type ItemGetDomain struct {
 	model2.GetItemDomain
 }
 
+type ItemGetInput struct {
+	Token string
+	model2.QueryFilter
+}
+
+type ItemGetResponse struct {
+	Message string
+	Items []model2.Item
+}
+
 func ItemGetHandler(c *gin.Context) {
-	s := factory.Factory.Get("/item/get")
+	input := ItemGetInput{}
 
-	domain := ItemGetDomain{}
-	err := c.Bind(&domain)
+	err := c.Bind(&input)
 	if err != nil {
 		return
 	}
-	conv := streamline.NewConveyorBelt(s, c, &domain, GenLogMeta)
-	conv.Debugw("input", domain)
-	code, err := conv.Run()
-	if err != nil {
-		c.AbortWithStatus(code)
-		return
+
+	domain := ItemGetDomain{
+		JwtAuth:       model.JwtAuth{
+			Token: input.Token,
+		},
+		GetItemDomain: model2.GetItemDomain{
+			QueryFilter: input.QueryFilter,
+		},
 	}
 
-	res := make(map[string]interface{})
-	res["items"] = domain.Result
-	c.JSON(code, res)
+	code := ExecuteStreamline(c, "/item/get", domain)
+
+	resp := ItemGetResponse{
+		Message: domain.BaseMessage,
+		Items:  domain.Result,
+	}
+	c.JSON(code, resp)
 }

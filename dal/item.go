@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/dealmaker/procedure/item/model"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func GetItem(ctx context.Context, filter model.QueryFilter) ([]model.Item, error) {
@@ -43,10 +44,10 @@ func GetItem(ctx context.Context, filter model.QueryFilter) ([]model.Item, error
 	return dbRes, nil
 }
 
-func InsertItem(ctx context.Context, data *model.Item) error {
-	_, err := ItemCollection.InsertOne(ctx, data)
+func InsertItem(ctx context.Context, data *model.Item) (string, error) {
+	res, err := ItemCollection.InsertOne(ctx, data)
 	if err != nil {
-		return err
+		return "", err
 	}
-	return nil
+	return res.InsertedID.(primitive.ObjectID).String(), nil
 }

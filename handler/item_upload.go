@@ -1,12 +1,10 @@
 package handler
 
 import (
-	"github.com/dealmaker/factory"
 	"github.com/dealmaker/procedure/item/model"
 	model2 "github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
-	"github.com/itzmeerkat/streamline"
 )
 
 type UploadItemDomain struct {
@@ -15,19 +13,33 @@ type UploadItemDomain struct {
 	model.Item
 }
 
-func ItemUpload(c *gin.Context) {
-	s := factory.Factory.Get("/item/upload")
+type UploadItemInput struct {
+	Token string
+	model.Item
+}
 
-	domain := UploadItemDomain{}
-	err := c.Bind(&domain)
+type UploadItemResponse struct {
+	Message string
+	ItemID string
+}
+
+func ItemUpload(c *gin.Context) {
+	input := UploadItemInput{}
+	err := c.Bind(&input)
 	if err != nil {
 		return
 	}
-	conv := streamline.NewConveyorBelt(s, c, &domain, GenLogMeta)
-	code, err := conv.Run()
-	if err != nil {
-		c.AbortWithStatusJSON(code, domain)
-		return
+
+	domain := UploadItemDomain{
+		JwtAuth: model2.JwtAuth{Token: input.Token},
+		Item:    input.Item,
 	}
-	c.JSON(code, domain.Base)
+	code := ExecuteStreamline(c, "/item/upload", domain)
+
+	resp := UploadItemResponse{
+		Message: domain.BaseMessage,
+		ItemID:  domain.ObjId,
+	}
+
+	c.JSON(code, resp)
 }

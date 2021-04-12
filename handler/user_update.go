@@ -1,12 +1,9 @@
 package handler
 
 import (
-	"github.com/dealmaker/factory"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
-	"github.com/itzmeerkat/streamline"
-	"net/http"
 )
 
 type UserUpdateDomain struct {
@@ -15,22 +12,31 @@ type UserUpdateDomain struct {
 	model.JwtAuth
 }
 
+type UserUpdateInput struct {
+	Token string
+	LoginName string
+	HashedPassword string
+	Status int
+}
+
 func UserUpdate(c *gin.Context) {
-	s := factory.Factory.Get("/auth/user/update")
-	domain := UserUpdateDomain{}
+	input := UserUpdateInput{}
 
-	err := c.Bind(&domain)
-
-	domain.Token = c.Query("token")
-
+	err := c.Bind(&input)
 	if err != nil {
 		return
 	}
-	conv := streamline.NewConveyorBelt(s, c, &domain, GenLogMeta)
-	code, err := conv.Run()
-	if err != nil {
-		c.AbortWithStatus(code)
-		return
+
+	domain := UserUpdateDomain{
+		JwtAuth: model.JwtAuth{
+			Token: input.Token,
+		},
+		CredUser: model.CredUser{
+			HashedPassword: input.HashedPassword,
+			LoginName:      input.LoginName,
+			Status:         input.Status,
+		},
 	}
-	c.JSON(http.StatusOK, nil)
+	code := ExecuteStreamline(c, "/auth/user/update", domain)
+	c.JSON(code, nil)
 }

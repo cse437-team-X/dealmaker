@@ -1,13 +1,10 @@
 package handler
 
 import (
-	"github.com/dealmaker/factory"
 	model2 "github.com/dealmaker/procedure/email/model"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
-	"github.com/itzmeerkat/streamline"
-	"net/http"
 )
 
 type UserSignupDomain struct {
@@ -17,19 +14,26 @@ type UserSignupDomain struct {
 	model2.EmailContent
 }
 
-func UserSignup(c *gin.Context) {
-	s := factory.Factory.Get("/auth/user/signup")
-	domain := UserSignupDomain{}
+type UserSignupInput struct {
+	LoginName string
+	HashedPassword string
+}
 
-	err := c.Bind(&domain)
+func UserSignup(c *gin.Context) {
+	input := UserSignupInput{}
+
+	err := c.Bind(&input)
 	if err != nil {
 		return
 	}
-	conv := streamline.NewConveyorBelt(s, c, &domain, GenLogMeta)
-	code, err := conv.Run()
-	if err != nil {
-		c.AbortWithStatus(code)
-		return
+
+	domain := UserSignupDomain{
+		CredUser: model.CredUser{
+			HashedPassword: input.HashedPassword,
+			LoginName:      input.LoginName,
+		},
 	}
-	c.JSON(http.StatusOK, nil)
+	code := ExecuteStreamline(c, "/auth/user/signup", domain)
+
+	c.JSON(code, nil)
 }
