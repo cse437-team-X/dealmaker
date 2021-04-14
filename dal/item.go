@@ -19,7 +19,6 @@ func GetItem(ctx context.Context, filter model.QueryFilter) ([]model.Item, error
 	if filter.FuzzyTitle != "" {
 		mongoFilter["title"] = bson.M{"$regex":filter.FuzzyTitle, "$options":"i"}
 	}
-	// TODO: time interval
     timeRange := bson.M{}
     if filter.BeginTime != 0 {
     	timeRange["$gte"] = filter.BeginTime

@@ -3,6 +3,7 @@ module github.com/dealmaker
 go 1.15
 
 require (
+	github.com/anthonynsimon/bild v0.13.0
 	github.com/aws/aws-sdk-go v1.38.2 // indirect
 	github.com/casbin/casbin/v2 v2.25.4
 	github.com/gin-contrib/cors v1.3.1

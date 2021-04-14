@@ -10,6 +10,7 @@ import (
 var Mongo *mongo.Client
 
 var ItemCollection *mongo.Collection
+var TicketCollection *mongo.Collection
 
 func InitMongoDB() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -22,4 +23,5 @@ func InitMongoDB() {
 	db := Mongo.Database("dealmaker")
 	//CredUserCollection = db.Collection("cred_user")
 	ItemCollection = db.Collection("items")
+	TicketCollection = db.Collection("tickets")
 }

@@ -5,13 +5,26 @@ type Item struct {
 
 	Description string
 	Title string
-	ImageUrls []string
+	Images []string
+	Thumbnails []string
 	Tags []string
+
+	OriginalPrice float32
+	NewPrice float32
+
 	Uploader uint
 	UpdateTime int64
 }
 
 func (i *Item) GetItem() *Item {
+	return i
+}
+
+type GetItemDomain struct {
+	QueryFilter
+	Result []Item
+}
+func (i *GetItemDomain) GetGetItemDomain() *GetItemDomain {
 	return i
 }
 
@@ -22,12 +35,10 @@ type QueryFilter struct {
 	BeginTime int64
 	EndTime int64
 	FuzzyTitle string
-}
 
-type GetItemDomain struct {
-	QueryFilter
-	Result []Item
+	// 0: full size, 1: thumbnails, 2: no image
+	ImageType int
 }
-func (i *GetItemDomain) GetGetItemDomain() *GetItemDomain {
-	return i
+func (q *QueryFilter) GetQueryFilter() *QueryFilter {
+	return q
 }
