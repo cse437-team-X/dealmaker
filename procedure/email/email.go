@@ -2,6 +2,7 @@ package email
 
 import (
 	"fmt"
+	"github.com/dealmaker/shared/auth/model"
 	"github.com/sendgrid/sendgrid-go"
 	"os"
 )
@@ -9,6 +10,7 @@ import (
 
 type WorkerInstance struct {
 	client *sendgrid.Client
+	FuncGetCredUser func(*model.CredUser) *model.CredUser
 }
 
 func (w WorkerInstance) Init() *WorkerInstance {
