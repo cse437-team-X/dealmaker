@@ -1,10 +1,13 @@
 package handler
 
 import (
+	"github.com/dealmaker/factory"
 	model2 "github.com/dealmaker/procedure/item/model"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
+	"github.com/itzmeerkat/streamline"
+	"net/http"
 )
 
 type ItemGetDomain struct {
@@ -40,7 +43,14 @@ func ItemGetHandler(c *gin.Context) {
 		},
 	}
 
-	code := ExecuteStreamline(c, "/item/get", domain)
+	s := factory.Factory.Get("/item/get")
+	conv := streamline.NewConveyorBelt(s, c, &domain, GenLogMeta)
+	conv.Debugw("input", domain)
+	code := conv.Run()
+	if code != http.StatusOK {
+		c.AbortWithStatusJSON(code, domain.GetBase())
+	}
+
 
 	resp := ItemGetResponse{
 		Message: domain.BaseMessage,

@@ -20,6 +20,7 @@ func (w *WorkerInstance) SignTokenToScope(scope string) func (c *streamline.Conv
 		jwtdata.TokenClaim.Uid = credUserData.ID
 		jwtdata.TokenClaim.Role = credUserData.Role
 		jwtdata.TokenClaim.Scope = scope
+		jwtdata.TokenClaim.LoginName = credUserData.LoginName
 
 		c.Debugw("claim", jwtdata.TokenClaim)
 

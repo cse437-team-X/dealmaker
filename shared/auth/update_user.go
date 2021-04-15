@@ -15,7 +15,7 @@ func (w *WorkerInstance) UpdateUser(c *streamline.ConveyorBelt) int {
 	myInterface := c.DataDomain.(UpdateUserInterface)
 	newUser := myInterface.GetCredUser()
 	a := myInterface.GetJwtAuth()
-
+	c.Debugw("old token claim", a.TokenClaim)
 	newUser.ID = a.TokenClaim.Uid
 
 	err := w.FuncUpdateCredUser(newUser)

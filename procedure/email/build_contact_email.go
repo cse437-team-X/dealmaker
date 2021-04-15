@@ -9,7 +9,8 @@ import (
 )
 
 type BuildContactEmailInterface interface {
-	GetCredUser() *model.CredUser
+	//GetCredUser() *model.CredUser
+	GetJwtAuth() *model.JwtAuth
 	GetContactEmailInfo() *model2.ContactEmailInfo
 	GetEmailContent() *model2.EmailContent
 }
@@ -20,18 +21,19 @@ Disclaimer: We do not hold responsibility any further from this point.
 `
 
 func (w *WorkerInstance) BuildContactEmail(c *streamline.ConveyorBelt) int {
-	data := c.DataDomain.(BuildContactEmailInterface).GetCredUser()
+	jwtData := c.DataDomain.(BuildContactEmailInterface).GetJwtAuth()
 	email := c.DataDomain.(BuildContactEmailInterface).GetEmailContent()
 
 	contact := c.DataDomain.(BuildContactEmailInterface).GetContactEmailInfo()
 
 	toUser := w.FuncGetCredUser(&contact.To)
+	c.Debugw("touser", toUser)
 	toEmail := toUser.LoginName+"@wustl.edu"
 
 	email.Title = "Contact request for " + contact.Item.Title
-	email.Body = fmt.Sprintf(contentFmt, toUser.LoginName, data.LoginName, contact.Item.Title)
+	email.Body = fmt.Sprintf(contentFmt, toUser.LoginName, jwtData.TokenClaim.LoginName, contact.Item.Title)
 	email.To = toEmail
-	email.Recipient = data.LoginName
+	email.Recipient = jwtData.TokenClaim.LoginName
 	return http.StatusOK
 }
 

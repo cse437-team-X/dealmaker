@@ -1,9 +1,12 @@
 package handler
 
 import (
+	"github.com/dealmaker/factory"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
+	"github.com/itzmeerkat/streamline"
+	"net/http"
 )
 
 type UserLoginDomain struct {
@@ -34,7 +37,15 @@ func UserLogin (c *gin.Context) {
 			HashedPassword: input.HashedPassword,
 		},
 	}
-	code := ExecuteStreamline(c, "/auth/user/login", domain)
+
+	s := factory.Factory.Get("/auth/user/login")
+	conv := streamline.NewConveyorBelt(s, c, &domain, GenLogMeta)
+	conv.Debugw("input", domain)
+	code := conv.Run()
+	if code != http.StatusOK {
+		c.AbortWithStatusJSON(code, domain.GetBase())
+	}
+
 	c.JSON(code, UserLoginResponse{
 		Token: domain.Token,
 		Message: domain.BaseMessage,

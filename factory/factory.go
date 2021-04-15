@@ -33,7 +33,9 @@ func init() {
 		FuncUpdateItem: nil,
 		FuncInsertItem: dal.InsertItem,
 	}.Init()
-	emailInstance = email.WorkerInstance{}.Init()
+	emailInstance = email.WorkerInstance{
+		FuncGetCredUser:        dal.GetUser,
+	}.Init()
 
 	acInstance = access_control.WorkerInstance{
 		ConfPath:   "./conf/rbac/model.conf",
@@ -73,6 +75,11 @@ func BuildStreamlines() {
 	Factory.NewStreamline("/auth/user/update", "update", "user").
 		Add("validate jwt", authInstance.ValidateJwt).
 		Add("update user", authInstance.UpdateUser)
+
+	Factory.NewStreamline("/item/user/contact", "contact", "user").
+		Add("validate jwt", authInstance.ValidateJwt).
+		Add("build contact email", emailInstance.BuildContactEmail).
+		Add("send email", emailInstance.SendEmail)
 
 	AddBaseRequestFillerToAll()
 }

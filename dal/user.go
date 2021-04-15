@@ -2,6 +2,7 @@ package dal
 
 import (
 	"github.com/dealmaker/shared/auth/model"
+	"gorm.io/gorm"
 )
 
 func InsertUser(u *model.CredUser) error {
@@ -25,7 +26,11 @@ func GetUser(terms *model.CredUser) *model.CredUser {
 }
 
 func UpdateUser(u *model.CredUser) error {
-	res := DB.Save(u)
+	res := DB.Model(&model.CredUser{
+		Model: gorm.Model{
+			ID: u.ID,
+		},
+	}).Updates(u)
 	if res.Error != nil {
 		return res.Error
 	}

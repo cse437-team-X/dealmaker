@@ -1,9 +1,12 @@
 package handler
 
 import (
+	"github.com/dealmaker/factory"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
+	"github.com/itzmeerkat/streamline"
+	"net/http"
 )
 
 type UserUpdateDomain struct {
@@ -37,6 +40,14 @@ func UserUpdate(c *gin.Context) {
 			Status:         input.Status,
 		},
 	}
-	code := ExecuteStreamline(c, "/auth/user/update", domain)
+
+	s := factory.Factory.Get("/auth/user/update")
+	conv := streamline.NewConveyorBelt(s, c, &domain, GenLogMeta)
+	conv.Debugw("input", domain)
+	code := conv.Run()
+	if code != http.StatusOK {
+		c.AbortWithStatusJSON(code, domain.GetBase())
+	}
+
 	c.JSON(code, nil)
 }

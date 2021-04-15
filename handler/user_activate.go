@@ -1,10 +1,13 @@
 package handler
 
 import (
+	"github.com/dealmaker/factory"
 	model2 "github.com/dealmaker/procedure/email/model"
 	"github.com/dealmaker/shared/auth/model"
 	"github.com/dealmaker/shared/base"
 	"github.com/gin-gonic/gin"
+	"github.com/itzmeerkat/streamline"
+	"net/http"
 )
 
 type UserActivateDomain struct {
@@ -19,6 +22,13 @@ func ActivateUser(c *gin.Context) {
 	domain := UserActivateDomain{}
 	domain.Token = token
 
-	code := ExecuteStreamline(c, "/auth/user/activate", domain)
+
+	s := factory.Factory.Get("/auth/user/activate")
+	conv := streamline.NewConveyorBelt(s, c, &domain, GenLogMeta)
+	conv.Debugw("input", domain)
+	code := conv.Run()
+	if code != http.StatusOK {
+		c.AbortWithStatusJSON(code, domain.GetBase())
+	}
 	c.JSON(code, nil)
 }

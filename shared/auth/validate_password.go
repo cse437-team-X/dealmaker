@@ -30,6 +30,7 @@ func (w *WorkerInstance) ValidatePassword(c *streamline.ConveyorBelt) int {
 	}
 
 	inputCredUser.Role = dbCredUser.Role
+	inputCredUser.ID = dbCredUser.ID
 
 	return http.StatusOK
 }

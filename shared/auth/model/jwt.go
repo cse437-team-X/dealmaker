@@ -24,6 +24,7 @@ type TokenClaim struct {
 	Uid uint
 	Role string
 	Scope string
+	LoginName string
 }
 
 func (t *TokenClaim) GetTokenClaim() *TokenClaim {

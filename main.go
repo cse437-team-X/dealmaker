@@ -23,9 +23,10 @@ func main() {
 	r.POST("/auth/user/login", handler.UserLogin)
 	r.GET("/auth/user/recover", handler.UserRecover)
 	r.GET("/auth/user/activate", handler.ActivateUser)
-	r.GET("/auth/user/update", handler.UserUpdate)
+	r.POST("/auth/user/update", handler.UserUpdate)
 	r.POST("/item/upload", handler.ItemUpload)
 	r.POST("/item/get", handler.ItemGetHandler)
+	r.POST("/item/user/contact", handler.UserContact)
 
 	err := r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 	if err != nil {
