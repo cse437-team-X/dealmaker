@@ -74,8 +74,8 @@ func createThumbnail(raw string) (string, error) {
 
 	r := math.Min(wr,hr)
 
-	nw := int(math.Round(width * r))
-	nh := int(math.Round(height * r))
+	nw := int(math.Round(width / r))
+	nh := int(math.Round(height / r))
 	resized := transform.Resize(m,nw,nh,transform.Linear)
 
 	buf := new(bytes.Buffer)

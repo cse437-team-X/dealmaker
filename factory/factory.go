@@ -32,6 +32,7 @@ func init() {
 		FuncGetItem:    dal.GetItem,
 		FuncUpdateItem: nil,
 		FuncInsertItem: dal.InsertItem,
+		FuncDeleteItem: dal.DeleteItem,
 	}.Init()
 	emailInstance = email.WorkerInstance{
 		FuncGetCredUser:        dal.GetUser,
@@ -44,7 +45,13 @@ func init() {
 }
 
 func BuildStreamlines() {
+	Factory.NewStreamline("/item/delete", "delete", "item").
+		Add("query items", itemInstance.ItemDelete)
+
 	Factory.NewStreamline("/item/get", "get", "item").
+		Add("query items", itemInstance.GetItem)
+
+	Factory.NewStreamline("/item/detail", "detail", "item").
 		Add("query items", itemInstance.GetItem)
 
 	Factory.NewStreamline("/item/upload", "upload", "item").

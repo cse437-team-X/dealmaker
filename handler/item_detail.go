@@ -9,36 +9,26 @@ import (
 	"net/http"
 )
 
-type ItemGetDomain struct {
+type ItemDetailDomain struct {
 	base.Base
-	//model.JwtAuth
 	model2.GetItemDomain
 }
 
-type ItemGetInput struct {
-	model2.QueryFilter
-}
-
-type ItemGetResponse struct {
+type ItemDetailResponse struct {
 	Message string
 	Items []model2.Item
 }
 
-func ItemGetHandler(c *gin.Context) {
-	input := ItemGetInput{}
+func ItemDetailHandler(c *gin.Context) {
+	input := c.Query("obj_id")
 
-	err := c.Bind(&input)
-	if err != nil {
-		return
-	}
-
-	domain := ItemGetDomain{
+	domain := ItemDetailDomain{
 		GetItemDomain: model2.GetItemDomain{
-			QueryFilter: input.QueryFilter,
+			QueryFilter: model2.QueryFilter{ObjId: input},
 		},
 	}
 
-	s := factory.Factory.Get("/item/get")
+	s := factory.Factory.Get("/item/detail")
 	conv := streamline.NewConveyorBelt(s, c, &domain, GenLogMeta)
 	conv.Debugw("input", domain)
 	code := conv.Run()
@@ -46,10 +36,9 @@ func ItemGetHandler(c *gin.Context) {
 		c.AbortWithStatusJSON(code, domain.GetBase())
 	}
 
-
-	resp := ItemGetResponse{
+	resp := ItemDetailResponse{
 		Message: domain.BaseMessage,
-		Items:  domain.Result,
+		Items:   domain.Result,
 	}
 	c.JSON(code, resp)
 }

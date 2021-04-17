@@ -23,6 +23,8 @@ func main() {
 	r.POST("/auth/user/login", handler.UserLogin)
 	r.GET("/auth/user/recover", handler.UserRecover)
 	r.GET("/auth/user/activate", handler.ActivateUser)
+	r.GET("/item/detail", handler.ItemDetailHandler)
+	r.GET("/item/delete", handler.ItemDeleteHandler)
 	r.POST("/auth/user/update", handler.UserUpdate)
 	r.POST("/item/upload", handler.ItemUpload)
 	r.POST("/item/get", handler.ItemGetHandler)
