@@ -27,7 +27,16 @@ func GetItem(ctx context.Context, filter model.QueryFilter) ([]model.Item, error
 }
 
 func InsertItem(ctx context.Context, data *model.Item) (string, error) {
-	res, err := ItemCollection.InsertOne(ctx, data)
+	res, err := ItemCollection.InsertOne(ctx, bson.D{
+		{"description", data.Description},
+		{"title", data.Title},
+		{"tags", data.Tags},
+		{"uploader", data.Uploader},
+		{"images", data.Images},
+		{"thumbnails", data.Thumbnails},
+		{"isdeleted", data.IsDeleted},
+		{"newprice", data.NewPrice},
+	})
 	if err != nil {
 		return "", err
 	}
