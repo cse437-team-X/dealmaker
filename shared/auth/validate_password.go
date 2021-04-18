@@ -19,6 +19,11 @@ func (w *WorkerInstance) ValidatePassword(c *streamline.ConveyorBelt) int {
 	dbCredUser := w.FuncGetCredUser(inputCredUser)
 	c.Debugw("cred_user form db", dbCredUser)
 
+	if c.S.Action == "recover" {
+		inputCredUser.Role = dbCredUser.Role
+		inputCredUser.ID = dbCredUser.ID
+		return http.StatusOK
+	}
 	if dbCredUser.HashedPassword != inputCredUser.HashedPassword {
 		rbase.BaseMessage = "password and login name doesn't match"
 		return http.StatusForbidden

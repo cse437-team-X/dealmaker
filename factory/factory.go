@@ -72,6 +72,7 @@ func BuildStreamlines() {
 		Add("sign_token", authInstance.SignTokenToScope(model.JwtScopeNormal))
 
 	Factory.NewStreamline("/auth/user/recover", "recover", "user").
+		Add("load user info", authInstance.ValidatePassword).
 		Add("sign_token", authInstance.SignTokenToScope(model.JwtScopeRecover)).
 		Add("send email", emailInstance.BuildRecoverEmail).
 		Add("send email", emailInstance.SendEmail)

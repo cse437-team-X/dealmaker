@@ -19,6 +19,7 @@ func (w *WorkerInstance) BuildRecoverEmail(c *streamline.ConveyorBelt) int {
 
 	email := c.DataDomain.(BuildRecoverEmailInterface).GetEmailContent()
 
+	c.Debugw("email jwt claim", token.TokenClaim)
 	toEmail := data.LoginName+"@wustl.edu"
 	c.Infow("sending email to", toEmail)
 	link := "http://437.cpp.moe:8080/auth/user/recover?token="+token.Token
