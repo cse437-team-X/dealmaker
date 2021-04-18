@@ -46,6 +46,7 @@ func init() {
 
 func BuildStreamlines() {
 	Factory.NewStreamline("/item/delete", "delete", "item").
+		Add("val", authInstance.ValidateJwt).
 		Add("query items", itemInstance.ItemDelete)
 
 	Factory.NewStreamline("/item/get", "get", "item").

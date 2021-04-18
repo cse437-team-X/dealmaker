@@ -24,6 +24,8 @@ func (w *WorkerInstance) ItemDelete(c *streamline.ConveyorBelt) int {
 		return http.StatusInternalServerError
 	}
 
+	c.Debugw("titems", targetItem, "uid", jwt.Uid, "objid", objid)
+
 	if jwt.Uid != targetItem[0].Uploader {
 		c.Infow("not enough permission deleting", objid)
 		return http.StatusForbidden
