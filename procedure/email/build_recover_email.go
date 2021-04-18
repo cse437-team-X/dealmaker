@@ -22,9 +22,8 @@ func (w *WorkerInstance) BuildRecoverEmail(c *streamline.ConveyorBelt) int {
 	c.Debugw("email jwt claim", token.TokenClaim)
 	toEmail := data.LoginName+"@wustl.edu"
 	c.Infow("sending email to", toEmail)
-	link := "http://437.cpp.moe:8080/auth/user/recover?token="+token.Token
 
-	content := "Hi, "+data.LoginName+"\nclick link to recover your account:" + link
+	content := "Hi, "+data.LoginName+"\nHere's your recovery token" + token.Token
 	email.Title = "RECOVER PASSWORD"
 	email.Body = content
 	email.To = toEmail
