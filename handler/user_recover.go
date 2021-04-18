@@ -18,7 +18,7 @@ type UserRecoverDomain struct {
 }
 
 func UserRecover (c *gin.Context) {
-	domain := UserLoginDomain{}
+	domain := UserRecoverDomain{}
 	loginName := c.Query("username")
 	domain.LoginName = loginName
 	domain.Scope = "recover"
