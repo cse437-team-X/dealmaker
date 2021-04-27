@@ -57,8 +57,8 @@ func (w *WorkerInstance) InsertItem(c *streamline.ConveyorBelt) int {
 }
 
 const (
-	THUMBNAIL_WIDTH = 286
-	THUMBNAIL_HEIGHT = 180
+	THUMBNAIL_WIDTH = 572
+	THUMBNAIL_HEIGHT = 360
 )
 
 func createThumbnail(raw string) (string, error) {
