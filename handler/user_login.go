@@ -23,6 +23,7 @@ type UserLoginInput struct {
 type UserLoginResponse struct {
 	Message string
 	Token string
+	Uid uint
 }
 
 func UserLogin (c *gin.Context) {
@@ -49,5 +50,6 @@ func UserLogin (c *gin.Context) {
 	c.JSON(code, UserLoginResponse{
 		Token: domain.Token,
 		Message: domain.BaseMessage,
+		Uid: domain.ID,
 	})
 }

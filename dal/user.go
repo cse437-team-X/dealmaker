@@ -15,8 +15,9 @@ func InsertUser(u *model.CredUser) error {
 }
 
 func GetUser(terms *model.CredUser) *model.CredUser {
+	trimTerm := model.CredUser{LoginName: terms.LoginName}
 	dbRes := model.CredUser{}
-	res := DB.Where(terms).First(&dbRes)
+	res := DB.Where(&trimTerm).First(&dbRes)
 	err := res.Error
 	if err != nil {
 		return nil
